@@ -1,6 +1,6 @@
 namespace PlatformerPrototype.Core.Data
 {
-    internal interface ICoreData : IDestroyable
+    public interface ICoreData : IDestroyable
     {
         public Configs.IConfigStorage ConfigStorage { get; }
 

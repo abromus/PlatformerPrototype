@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Core.Services
 {
-    internal sealed class StateMachine : IStateMachine
+    public sealed class StateMachine : IStateMachine
     {
         private IExitState _currentState;
 

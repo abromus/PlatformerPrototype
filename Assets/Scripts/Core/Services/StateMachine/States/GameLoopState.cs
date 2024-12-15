@@ -16,7 +16,7 @@
             var gameSceneControllerFactory = _coreData.FactoryStorage.GetFactory<Factories.IGameSceneControllerFactory>();
 
             _gameSceneController = gameSceneControllerFactory.Create();
-            _gameSceneController.Init();
+            _gameSceneController.Init(_coreData);
             _gameSceneController.Run();
         }
 

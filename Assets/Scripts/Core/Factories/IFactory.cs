@@ -1,4 +1,4 @@
 namespace PlatformerPrototype.Core.Factories
 {
-    internal interface IFactory { }
+    public interface IFactory { }
 }

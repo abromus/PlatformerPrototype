@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Core.Services
 {
-    internal interface IStateMachine : IService
+    public interface IStateMachine : IService
     {
         public void Add<TState>(TState state) where TState : class, IState;
 

@@ -2,41 +2,27 @@
 {
     internal sealed class GameSceneController : Core.BaseSceneController
     {
-        //[UnityEngine.SerializeField] private Configs.ConfigStorage _configStorage;
+        [UnityEngine.SerializeField] private Configs.ConfigStorage _configStorage;
 
-        //private Data.ICoreData _coreData;
+        private IGame _game;
 
-        /*[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        internal void CreateCoreData()
+        public override void Init(Core.Data.ICoreData coreData)
         {
-            _coreData = new Data.CoreData(this);
+            _configStorage.Init();
 
-            EnterInitState();
-        }*/
-
-        public override void Init()
-        {
-            UnityEngine.Debug.Log($"Init");
-
+            _game = new Game(coreData, _configStorage);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Run()
         {
-            UnityEngine.Debug.Log($"Run");
-
+            _game.Run();
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Destroy()
         {
-            UnityEngine.Debug.Log($"Destroy");
-
+            _game.Destroy();
         }
-
-        /*private void EnterInitState()
-        {
-            var stateMachine = _coreData.ServiceStorage.GetService<Services.IStateMachine>();
-
-            stateMachine.Enter<Services.BootstrapState>();
-        }*/
     }
 }

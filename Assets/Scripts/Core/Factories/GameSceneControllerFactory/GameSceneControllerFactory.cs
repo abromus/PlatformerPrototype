@@ -7,6 +7,7 @@
         public BaseSceneController Create()
         {
             var gameSceneController = Instantiate(_gameSceneControllerPrefab);
+            gameSceneController.gameObject.RemoveCloneSuffix();
 
             return gameSceneController;
         }

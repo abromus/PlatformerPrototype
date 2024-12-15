@@ -1,4 +1,4 @@
 ﻿namespace PlatformerPrototype.Core.Factories
 {
-    internal interface IUiFactory : IFactory { }
+    public interface IUiFactory : IFactory { }
 }

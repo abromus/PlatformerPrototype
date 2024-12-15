@@ -5,7 +5,6 @@
         private readonly Data.ICoreData _coreData;
         private readonly System.Collections.Generic.Dictionary<System.Type, IService> _services;
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal ServiceStorage(UnityEngine.MonoBehaviour coroutineRunner, Data.CoreData coreData)
         {
             _coreData = coreData;

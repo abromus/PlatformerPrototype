@@ -34,6 +34,13 @@
 
             yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, _info.Mode);
 
+            if (_info.IsActive)
+            {
+                var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
+
+                UnityEngine.SceneManagement.SceneManager.SetActiveScene(scene);
+            }
+
             success?.Invoke();
         }
 

@@ -34,7 +34,6 @@
 
         private TFactory GetFactory<TFactory>(IUiFactory[] uiFactories) where TFactory : class, IFactory
         {
-
             for (int i = 0; i < uiFactories.Length; i++)
             {
                 var uiFactory = uiFactories[i];

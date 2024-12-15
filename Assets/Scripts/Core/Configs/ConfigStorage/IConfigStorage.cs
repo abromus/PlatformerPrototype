@@ -1,6 +1,6 @@
 namespace PlatformerPrototype.Core.Configs
 {
-    internal interface IConfigStorage
+    public interface IConfigStorage
     {
         public void Init();
 

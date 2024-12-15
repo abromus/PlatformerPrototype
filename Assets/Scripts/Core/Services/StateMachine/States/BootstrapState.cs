@@ -11,7 +11,7 @@
 
         public void Enter()
         {
-            var sceneInfo = new SceneInfo(SceneNames.Core, UnityEngine.SceneManagement.LoadSceneMode.Single, OnSceneLoad);
+            var sceneInfo = new SceneInfo(SceneNames.Core, UnityEngine.SceneManagement.LoadSceneMode.Single, true, OnSceneLoad);
 
             _stateMachine.Enter<SceneLoaderState, SceneInfo>(sceneInfo);
         }
