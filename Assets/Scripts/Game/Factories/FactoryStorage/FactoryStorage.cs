@@ -4,10 +4,12 @@
     {
         private System.Collections.Generic.Dictionary<System.Type, Core.Factories.IFactory> _factories;
 
+        private readonly Data.IGameData _gameData;
         private readonly Core.Configs.IConfigStorage _configStorage;
 
-        internal FactoryStorage(Core.Configs.IConfigStorage configStorage)
+        internal FactoryStorage(Data.IGameData gameData, Core.Configs.IConfigStorage configStorage)
         {
+            _gameData = gameData;
             _configStorage = configStorage;
 
             var uiFactories = _configStorage.GetConfig<Core.Configs.IUiFactoryConfig>().UiFactories;
@@ -37,6 +39,7 @@
         private IWorldFactory InitWorldFactory(Core.Factories.IUiFactory[] uiFactories)
         {
             var worldFactory = GetFactory<IWorldFactory>(uiFactories);
+            worldFactory.Init(_gameData);
 
             return worldFactory;
         }

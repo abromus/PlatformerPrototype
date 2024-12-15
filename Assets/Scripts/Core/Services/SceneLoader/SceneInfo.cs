@@ -1,5 +1,6 @@
 ﻿namespace PlatformerPrototype.Core.Services
 {
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 8)]
     internal readonly struct SceneInfo
     {
         private readonly string _sceneName;
@@ -7,15 +8,15 @@
         private readonly bool _isActive;
         private readonly System.Action _success;
 
-        internal string SceneName => _sceneName;
+        internal readonly string SceneName => _sceneName;
 
-        internal UnityEngine.SceneManagement.LoadSceneMode Mode => _mode;
+        internal readonly UnityEngine.SceneManagement.LoadSceneMode Mode => _mode;
 
-        internal bool IsActive => _isActive;
+        internal readonly bool IsActive => _isActive;
 
-        internal System.Action Success => _success;
+        internal readonly System.Action Success => _success;
 
-        public SceneInfo(
+        internal SceneInfo(
             string sceneName,
             UnityEngine.SceneManagement.LoadSceneMode mode,
             bool isActive,

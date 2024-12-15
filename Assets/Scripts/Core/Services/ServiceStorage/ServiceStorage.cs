@@ -9,13 +9,17 @@
         {
             _coreData = coreData;
 
+            var inputService = InitInputService();
             var sceneLoader = InitSceneLoader(coroutineRunner);
             var stateMachine = InitStateMachine(sceneLoader);
+            var updaterService = InitUpdaterService();
 
             _services = new(8)
             {
+                [typeof(IInputService)] = inputService,
                 [typeof(ISceneLoader)] = sceneLoader,
                 [typeof(IStateMachine)] = stateMachine,
+                [typeof(IUpdaterService)] = updaterService,
             };
         }
 
@@ -35,6 +39,13 @@
             _services.Clear();
         }
 
+        private IInputService InitInputService()
+        {
+            var inputService = new InputService();
+
+            return inputService;
+        }
+
         private ISceneLoader InitSceneLoader(UnityEngine.MonoBehaviour coroutineRunner)
         {
             var sceneLoader = new SceneLoader(coroutineRunner);
@@ -52,6 +63,13 @@
             stateMachine.Add(new SceneLoaderState(sceneLoader));
 
             return stateMachine;
+        }
+
+        private IUpdaterService InitUpdaterService()
+        {
+            var updaterService = new UpdaterService();
+
+            return updaterService;
         }
     }
 }

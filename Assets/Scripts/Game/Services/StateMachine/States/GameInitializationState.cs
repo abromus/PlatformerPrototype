@@ -13,27 +13,18 @@
 
         public void Enter()
         {
-            var factoryStorage = _gameData.FactoryStorage;
-            var player = CreatePlayer(factoryStorage);
-            var world = CreateWorld(factoryStorage);
+            var world = CreateWorld();
+            var args = new GameStateArgs(world);
 
-            //_stateMachine.Enter<GameStartState, SceneInfo>(sceneInfo);
+            _stateMachine.Enter<GameStartState, GameStateArgs>(args);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Exit() { }
 
-        private World.Entities.IPlayer CreatePlayer(Core.Factories.IFactoryStorage factoryStorage)
+        private World.IWorld CreateWorld()
         {
-            var factory = factoryStorage.GetFactory<Factories.IPlayerFactory>();
-            var player = factory.Create();
-
-            return player;
-        }
-
-        private World.IWorld CreateWorld(Core.Factories.IFactoryStorage factoryStorage)
-        {
-            var factory = factoryStorage.GetFactory<Factories.IWorldFactory>();
+            var factory = _gameData.FactoryStorage.GetFactory<Factories.IWorldFactory>();
             var world = factory.Create();
 
             return world;

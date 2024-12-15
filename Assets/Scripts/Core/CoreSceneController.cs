@@ -5,6 +5,7 @@
         [UnityEngine.SerializeField] private Configs.ConfigStorage _configStorage;
 
         private Data.ICoreData _coreData;
+        private Services.IUpdaterService _updater;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal void Init()
@@ -17,7 +18,34 @@
         {
             _coreData = new Data.CoreData(this, _configStorage);
 
+            _updater = _coreData.ServiceStorage.GetService<Services.IUpdaterService>();
+
             EnterInitState();
+        }
+
+        private void Update()
+        {
+            _updater.Tick(UnityEngine.Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            _updater.FixedTick(UnityEngine.Time.deltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            _updater.LateTick(UnityEngine.Time.deltaTime);
+        }
+
+        private void OnApplicationFocus(bool focus)
+        {
+            _updater.SetPause(focus == false);
+        }
+
+        private void OnApplicationPause(bool pause)
+        {
+            _updater.SetPause(pause);
         }
 
         private void OnDestroy()

@@ -20,7 +20,7 @@ namespace PlatformerPrototype.Game.Data
             _coreData = coreData;
             _configStorage = configStorage;
             _serviceStorage = new Services.ServiceStorage(this);
-            _factoryStorage = new Factories.FactoryStorage(configStorage);
+            _factoryStorage = new Factories.FactoryStorage(this, configStorage);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

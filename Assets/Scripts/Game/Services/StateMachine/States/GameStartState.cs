@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.Services
 {
-    internal sealed class GameStartState : Core.Services.IEnterState
+    internal sealed class GameStartState : Core.Services.IEnterState<GameStateArgs>
     {
         private readonly Core.Services.IStateMachine _stateMachine;
 
@@ -9,8 +9,9 @@
             _stateMachine = stateMachine;
         }
 
-        public void Enter()
+        public void Enter(GameStateArgs args)
         {
+            _stateMachine.Enter<GameRestartState, GameStateArgs>(args);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.Services
 {
-    internal sealed class GameRestartState : Core.Services.IEnterState
+    internal sealed class GameRestartState : Core.Services.IEnterState<GameStateArgs>
     {
         private readonly Core.Services.IStateMachine _stateMachine;
 
@@ -9,11 +9,11 @@
             _stateMachine = stateMachine;
         }
 
-        public void Enter()
+        public void Enter(GameStateArgs args)
         {
-            //var sceneInfo = new SceneInfo(SceneNames.Game, UnityEngine.SceneManagement.LoadSceneMode.Additive, OnSceneLoad);
+            args.World.Restart();
 
-            //_stateMachine.Enter<SceneLoaderState, SceneInfo>(sceneInfo);
+            _stateMachine.Enter<GameLoopState, GameStateArgs>(args);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

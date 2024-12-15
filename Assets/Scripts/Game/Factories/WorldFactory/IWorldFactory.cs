@@ -2,6 +2,8 @@
 {
     internal interface IWorldFactory : Core.Factories.IFactory
     {
+        public void Init(Data.IGameData gameData);
+
         public World.IWorld Create();
     }
 }

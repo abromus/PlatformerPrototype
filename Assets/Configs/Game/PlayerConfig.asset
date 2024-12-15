@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e72cb27c0364cd4418049ab1ed4b4a37, type: 3}
-  m_Name: ConfigStorage
+  m_Script: {fileID: 11500000, guid: fb39e000f7cf85545903180a2014706d, type: 3}
+  m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  _playerConfig: {fileID: 11400000, guid: a50cb7cd79abea649a33d7d2f565729d, type: 2}
-  _uiFactoryConfig: {fileID: 11400000, guid: 303157dd91ef0264d974b22d981ccfd2, type: 2}
+  _movementSensitivity: {x: 3, y: 2}
