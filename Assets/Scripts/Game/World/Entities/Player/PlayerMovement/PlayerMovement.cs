@@ -2,18 +2,18 @@
 {
     internal sealed class PlayerMovement : IPlayerMovement
     {
-        private UnityEngine.Vector2 _moveDirection;
+        private float _moveXDirection;
         private bool _isPaused;
 
         private readonly IPlayerInput _playerInput;
         private readonly UnityEngine.Transform _transform;
-        private readonly UnityEngine.Vector2 _movementSensitivity;
+        private readonly float _movementXSensitivity;
 
         internal PlayerMovement(in PlayerMovementArgs args)
         {
             _playerInput = args.PlayerInput;
             _transform = args.Transform;
-            _movementSensitivity = args.PlayerConfig.MovementSensitivity;
+            _movementXSensitivity = args.PlayerConfig.MovementXSensitivity;
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -37,7 +37,7 @@
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void CheckInput()
         {
-            _moveDirection = _playerInput.MoveDirection;
+            _moveXDirection = _playerInput.MoveXDirection;
         }
 
         private void Move(float deltaTime)
@@ -46,8 +46,7 @@
                 return;
 
             var position = _transform.position;
-            position.x += _moveDirection.x * _movementSensitivity.x * deltaTime;
-            position.y += _moveDirection.y * _movementSensitivity.y * deltaTime;
+            position.x += _moveXDirection * _movementXSensitivity * deltaTime;
 
             _transform.position = position;
         }

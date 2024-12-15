@@ -4,5 +4,7 @@
     {
         internal const float Left = -1f;
         internal const float Right = 1f;
+
+        internal const float Zero = 0f;
     }
 }

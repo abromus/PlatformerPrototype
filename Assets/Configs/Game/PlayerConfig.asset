@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb39e000f7cf85545903180a2014706d, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  _movementSensitivity: {x: 3, y: 2}
+  _movementXSensitivity: 3
   _singleShootingDelay: 0.5
   _continuousShootingDelay: 0.25
   _projectileOffset: {x: 0.825, y: 0, z: 0}

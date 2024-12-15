@@ -2,15 +2,14 @@
 {
     internal sealed class PlayerInput : IPlayerInput
     {
-        private UnityEngine.Vector2 _moveDirection;
+        private float _moveXDirection;
         private bool _isShooting;
         private ShootingMode _shootingMode;
         private bool _isPaused;
 
         private readonly Core.Services.IInputService _inputService;
-        private readonly UnityEngine.Vector2 _zeroPosition;
 
-        public UnityEngine.Vector2 MoveDirection => _moveDirection;
+        public float MoveXDirection => _moveXDirection;
 
         public bool IsShooting => _isShooting;
 
@@ -35,15 +34,7 @@
 
         private void CheckInput()
         {
-            if (_isPaused == false)
-            {
-                _moveDirection.x = _inputService.GetHorizontalAxisRaw();
-                _moveDirection.y = _inputService.GetVerticalAxisRaw();
-            }
-            else
-            {
-                _moveDirection = _zeroPosition;
-            }
+            _moveXDirection = _isPaused ? Constants.Zero : _inputService.GetHorizontalAxisRaw();
 
             _shootingMode = _inputService.GetLeftMouseButtonDown()
                 ? ShootingMode.Single

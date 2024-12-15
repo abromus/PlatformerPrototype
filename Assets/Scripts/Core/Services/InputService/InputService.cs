@@ -21,12 +21,6 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public float GetVerticalAxisRaw()
-        {
-            return UnityEngine.Input.GetAxisRaw(Keys.VerticalAxis);
-        }
-
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Destroy() { }
 
         private sealed class Keys
@@ -34,7 +28,6 @@
             internal const int LeftButton = 0;
 
             internal const string HorizontalAxis = "Horizontal";
-            internal const string VerticalAxis = "Vertical";
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     internal interface IPlayerInput
     {
-        public UnityEngine.Vector2 MoveDirection { get; }
+        public float MoveXDirection { get; }
 
         public bool IsShooting { get; }
 

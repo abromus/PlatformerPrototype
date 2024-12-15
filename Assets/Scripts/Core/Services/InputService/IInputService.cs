@@ -7,7 +7,5 @@
         public bool GetLeftMouseButtonDown();
 
         public float GetHorizontalAxisRaw();
-
-        public float GetVerticalAxisRaw();
     }
 }
