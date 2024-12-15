@@ -9,28 +9,32 @@
         private readonly UnityEngine.Transform _transform;
         private readonly UnityEngine.Vector2 _movementSensitivity;
 
-        internal PlayerMovement(IPlayerInput playerInput, UnityEngine.Transform transform, Configs.IPlayerConfig playerConfig)
+        internal PlayerMovement(in PlayerMovementArgs args)
         {
-            _playerInput = playerInput;
-            _transform = transform;
-            _movementSensitivity = playerConfig.MovementSensitivity;
+            _playerInput = args.PlayerInput;
+            _transform = args.Transform;
+            _movementSensitivity = args.PlayerConfig.MovementSensitivity;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Tick(float deltaTime)
         {
             CheckInput();
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void FixedTick(float deltaTime)
         {
             Move(deltaTime);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void SetPause(bool isPaused)
         {
             _isPaused = isPaused;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void CheckInput()
         {
             _moveDirection = _playerInput.MoveDirection;

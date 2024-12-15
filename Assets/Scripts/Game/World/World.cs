@@ -2,6 +2,8 @@
 {
     internal sealed class World : UnityEngine.MonoBehaviour, IWorld
     {
+        [UnityEngine.SerializeField] private UnityEngine.Transform _projectileContainer;
+
         private Data.IGameData _gameData;
         private Entities.IPlayer _player;
 
@@ -28,7 +30,7 @@
             var factory = _gameData.FactoryStorage.GetFactory<Factories.IPlayerFactory>();
             
             _player = factory.Create();
-            _player.Init(_gameData);
+            _player.Init(_gameData, _projectileContainer);
             _player.SetParent(transform);
         }
     }

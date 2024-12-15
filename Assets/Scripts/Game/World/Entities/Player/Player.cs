@@ -2,17 +2,20 @@ namespace PlatformerPrototype.Game.World.Entities
 {
     internal sealed class Player : UnityEngine.MonoBehaviour, IPlayer
     {
+        [UnityEngine.SerializeField] private Projectiles.Projectile _projectilePrefab;
         [UnityEngine.SerializeField] private UnityEngine.Animator _animator;
 
         private Data.IGameData _gameData;
+        private UnityEngine.Transform _projectileContainer;
         private Core.Services.IUpdaterService _updaterService;
         private IPlayerInput _input;
         private IPlayerMovement _movement;
         private IPlayerShooting _shooting;
 
-        public void Init(Data.IGameData gameData)
+        public void Init(Data.IGameData gameData, UnityEngine.Transform projectileContainer)
         {
             _gameData = gameData;
+            _projectileContainer = projectileContainer;
 
             InitModules();
             Subscribe();
@@ -22,6 +25,7 @@ namespace PlatformerPrototype.Game.World.Entities
         {
             _input.Tick(deltaTime);
             _movement.Tick(deltaTime);
+            _shooting.Tick(deltaTime);
         }
 
         public void FixedTick(float deltaTime)
@@ -51,6 +55,8 @@ namespace PlatformerPrototype.Game.World.Entities
         public void Destroy()
         {
             Unsubscribe();
+
+            _shooting.Destroy();
         }
 
         private void OnDestroy()
@@ -68,8 +74,19 @@ namespace PlatformerPrototype.Game.World.Entities
             var playerConfig = _gameData.ConfigStorage.GetConfig<Configs.IPlayerConfig>();
             
             _input = new PlayerInput(inputService);
-            _movement = new PlayerMovement(_input, transform, playerConfig);
-            _shooting = new PlayerShooting(_input, transform, playerConfig);
+
+            var playerMovementArgs = new PlayerMovementArgs(_input, transform, playerConfig);
+            _movement = new PlayerMovement(in playerMovementArgs);
+
+            var projectileFactory = _gameData.FactoryStorage.GetFactory<Factories.IProjectileFactory>();
+            var playerShootingArgs = new PlayerShootingArgs(
+                _input,
+                transform,
+                projectileFactory,
+                _projectilePrefab,
+                _projectileContainer,
+                playerConfig);
+            _shooting = new PlayerShooting(in playerShootingArgs);
             //var animator = new PlayerAnimator(_animator);
         }
 

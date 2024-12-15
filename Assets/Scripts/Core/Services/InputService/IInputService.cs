@@ -2,9 +2,9 @@
 {
     public interface IInputService : IService
     {
-        public bool GetKey(UnityEngine.KeyCode key);
+        public bool GetLeftMouseButton();
 
-        public bool GetKeyDown(UnityEngine.KeyCode key);
+        public bool GetLeftMouseButtonDown();
 
         public float GetHorizontalAxisRaw();
 

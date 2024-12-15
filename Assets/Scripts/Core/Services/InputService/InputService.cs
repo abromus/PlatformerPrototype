@@ -3,15 +3,15 @@
     internal sealed class InputService : IInputService
     {
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public bool GetKey(UnityEngine.KeyCode key)
+        public bool GetLeftMouseButton()
         {
-            return UnityEngine.Input.GetKey(key);
+            return UnityEngine.Input.GetMouseButton(Keys.LeftButton);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public bool GetKeyDown(UnityEngine.KeyCode key)
+        public bool GetLeftMouseButtonDown()
         {
-            return UnityEngine.Input.GetKeyDown(key);
+            return UnityEngine.Input.GetMouseButtonDown(Keys.LeftButton);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -31,6 +31,8 @@
 
         private sealed class Keys
         {
+            internal const int LeftButton = 0;
+
             internal const string HorizontalAxis = "Horizontal";
             internal const string VerticalAxis = "Vertical";
         }

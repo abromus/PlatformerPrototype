@@ -6,6 +6,8 @@
 
         public bool IsShooting { get; }
 
+        public ShootingMode ShootingMode { get; }
+
         public void Tick(float deltaTime);
 
         public void SetPause(bool isPaused);

@@ -12,13 +12,16 @@
             _gameData = gameData;
             _configStorage = configStorage;
 
+            var updater = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IUpdaterService>();
             var uiFactories = _configStorage.GetConfig<Core.Configs.IUiFactoryConfig>().UiFactories;
             var playerFactory = InitPlayerFactory(uiFactories);
+            var projectileFactory = InitProjectileFactory(uiFactories, updater);
             var worldFactory = InitWorldFactory(uiFactories);
 
             _factories = new(8)
             {
                 [typeof(IPlayerFactory)] = playerFactory,
+                [typeof(IProjectileFactory)] = projectileFactory,
                 [typeof(IWorldFactory)] = worldFactory,
             };
         }
@@ -34,6 +37,14 @@
             var playerFactory = GetFactory<IPlayerFactory>(uiFactories);
 
             return playerFactory;
+        }
+
+        private IProjectileFactory InitProjectileFactory(Core.Factories.IUiFactory[] uiFactories, Core.Services.IUpdaterService updater)
+        {
+            var projectileFactory = GetFactory<IProjectileFactory>(uiFactories);
+            projectileFactory.Init(updater);
+
+            return projectileFactory;
         }
 
         private IWorldFactory InitWorldFactory(Core.Factories.IUiFactory[] uiFactories)

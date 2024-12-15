@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   _movementSensitivity: {x: 3, y: 2}
+  _singleShootingDelay: 0.5
+  _continuousShootingDelay: 0.25
+  _projectileOffset: {x: 0.825, y: 0, z: 0}

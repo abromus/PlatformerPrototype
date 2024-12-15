@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiFactories:
   - {fileID: 9128020440130621169, guid: 976272fd498ce4e448b9d1671f18a58a, type: 3}
+  - {fileID: 5098097544901847610, guid: 311551c385efea04581f07cc3bccca2e, type: 3}
   - {fileID: 1215028239081359398, guid: 57221f74da06ece4da501f07746c294f, type: 3}
