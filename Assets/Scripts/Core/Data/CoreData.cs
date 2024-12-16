@@ -12,10 +12,13 @@ namespace PlatformerPrototype.Core.Data
 
         public Factories.IFactoryStorage FactoryStorage => _factoryStorage;
 
-        internal CoreData(UnityEngine.MonoBehaviour coroutineRunner, Configs.IConfigStorage configStorage)
+        internal CoreData(
+            UnityEngine.MonoBehaviour coroutineRunner,
+            Configs.IConfigStorage configStorage,
+            UnityEngine.Transform uiServiceContainer)
         {
             _configStorage = configStorage;
-            _serviceStorage = new Services.ServiceStorage(coroutineRunner, this);
+            _serviceStorage = new Services.ServiceStorage(coroutineRunner, this, uiServiceContainer);
             _factoryStorage = new Factories.FactoryStorage(configStorage);
         }
 

@@ -1,4 +1,7 @@
 ﻿namespace PlatformerPrototype.Core
 {
-    public interface IPoolable { }
+    public interface IPoolable : IDestroyable
+    {
+        public void Clear();
+    }
 }

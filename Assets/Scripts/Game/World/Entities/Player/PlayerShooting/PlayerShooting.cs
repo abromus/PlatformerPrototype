@@ -61,7 +61,6 @@
                 _pool.Release(_projectiles[i]);
 
             _projectiles.Clear();
-
             _pool.Destroy();
         }
 
@@ -102,9 +101,10 @@
         private void InitProjectile()
         {
             var projectile = _pool.Get();
-            var position = _transform.position + _projectileOffset;
             var direction = _transform.localScale.x == Constants.Left ? Constants.Left : Constants.Right;
+            var position = _transform.position + direction * _projectileOffset;
             projectile.InitPosition(position, direction);
+            projectile.Destroyed += OnProjectileDestroyed;
         }
 
         private void InitShootingDelay()

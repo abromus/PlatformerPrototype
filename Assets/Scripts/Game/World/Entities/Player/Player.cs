@@ -12,6 +12,8 @@ namespace PlatformerPrototype.Game.World.Entities
         private IPlayerMovement _movement;
         private IPlayerShooting _shooting;
 
+        public UnityEngine.Transform Transform => transform;
+
         public void Init(Data.IGameData gameData, UnityEngine.Transform projectileContainer)
         {
             _gameData = gameData;
@@ -100,10 +102,13 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void Unsubscribe()
         {
-            _updaterService.RemoveUpdatable(this);
-            _updaterService.RemoveFixedUpdatable(this);
-            _updaterService.RemoveLateUpdatable(this);
-            _updaterService.RemovePausable(this);
+            if (_updaterService != null)
+            {
+                _updaterService.RemoveUpdatable(this);
+                _updaterService.RemoveFixedUpdatable(this);
+                _updaterService.RemoveLateUpdatable(this);
+                _updaterService.RemovePausable(this);
+            }
         }
     }
 }

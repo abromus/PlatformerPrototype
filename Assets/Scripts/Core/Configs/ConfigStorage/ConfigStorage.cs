@@ -3,6 +3,7 @@
     [UnityEngine.CreateAssetMenu(fileName = nameof(ConfigStorage), menuName = ConfigKeys.CorePathKey + nameof(ConfigStorage))]
     internal sealed class ConfigStorage : UnityEngine.ScriptableObject, IConfigStorage
     {
+        [UnityEngine.SerializeField] private UiServiceConfig _uiServiceConfig;
         [UnityEngine.SerializeField] private UiFactoryConfig _uiFactoryConfig;
 
         private System.Collections.Generic.Dictionary<System.Type, IConfig> _configs;
@@ -12,6 +13,7 @@
         {
             _configs = new(8)
             {
+                [typeof(IUiServiceConfig)] = _uiServiceConfig,
                 [typeof(IUiFactoryConfig)] = _uiFactoryConfig,
             };
         }

@@ -13,5 +13,7 @@
         public abstract void SetPause(bool isPaused);
 
         public abstract void Clear();
+
+        public abstract void Destroy();
     }
 }

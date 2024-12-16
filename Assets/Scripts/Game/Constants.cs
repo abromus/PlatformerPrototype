@@ -6,5 +6,6 @@
         internal const float Right = 1f;
 
         internal const float Zero = 0f;
+        internal const float Half = 0.5f;
     }
 }

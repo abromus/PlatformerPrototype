@@ -39,6 +39,9 @@ namespace PlatformerPrototype.Core
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Destroy()
         {
+            for (int i = 0; i < _objects.Count; i++)
+                _objects[i].Destroy();
+
             _objects.Clear();
         }
     }

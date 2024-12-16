@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36321e2c07552144fb4f6e9277bdd734, type: 3}
+  m_Name: EnemiesConfig
+  m_EditorClassIdentifier: 
+  _minSpawnCount: 1
+  _maxSpawnCount: 10
+  _minSpawnDelay: 1
+  _maxSpawnDelay: 10
+  _enemies:
+  - _index: 1
+    _hp: 3
+    _speed: 1
+    _baseZombiePrefab: {fileID: -6478331589083273028, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+  - _index: 2
+    _hp: 5
+    _speed: 2
+    _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}
+  - _index: 3
+    _hp: 5
+    _speed: 10
+    _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}

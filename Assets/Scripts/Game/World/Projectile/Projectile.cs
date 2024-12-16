@@ -2,19 +2,21 @@
 {
     internal sealed class Projectile : BaseProjectile
     {
+        [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
         [UnityEngine.SerializeField] private float _speed;
         [UnityEngine.SerializeField] private float _existenceTime;
 
-        private Core.Services.IUpdaterService _updaterSevice;
+        private Core.Services.IUpdaterService _updaterService;
         private UnityEngine.Vector3 _direction;
         private float _movingTime;
         private bool _isPaused;
 
         public override event System.Action<IProjectile> Destroyed;
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Init(Core.Services.IUpdaterService updaterSevice)
         {
-            _updaterSevice = updaterSevice;
+            _updaterService = updaterSevice;
         }
 
         public override void InitPosition(UnityEngine.Vector3 position, float direction)
@@ -35,6 +37,7 @@
             Move(deltaTime);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void SetPause(bool isPaused)
         {
             _isPaused = isPaused;
@@ -45,6 +48,18 @@
             Destroy();
 
             //отключить звук
+        }
+
+        public override void Destroy()
+        {
+            Unsubscribe();
+
+            gameObject.SetActive(false);
+        }
+
+        private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+        {
+            Destroyed?.Invoke(this);
         }
 
         private void OnDestroy()
@@ -65,23 +80,27 @@
                 Destroyed?.Invoke(this);
         }
 
-        private void Destroy()
-        {
-            Unsubscribe();
-
-            gameObject.SetActive(false);
-        }
-
         private void Subscribe()
         {
-            _updaterSevice.AddUpdatable(this);
-            _updaterSevice.AddPausable(this);
+            _updaterService.AddUpdatable(this);
+            _updaterService.AddPausable(this);
         }
 
         private void Unsubscribe()
         {
-            _updaterSevice.RemoveUpdatable(this);
-            _updaterSevice.RemovePausable(this);
+            if (_updaterService != null)
+            {
+                _updaterService.RemoveUpdatable(this);
+                _updaterService.RemovePausable(this);
+            }
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            UnityEngine.Gizmos.color = UnityEngine.Color.green;
+            UnityEngine.Gizmos.DrawWireCube(transform.position, _size);
+        }
+#endif
     }
 }

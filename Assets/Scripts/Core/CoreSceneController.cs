@@ -3,6 +3,7 @@
     internal sealed class CoreSceneController : UnityEngine.MonoBehaviour
     {
         [UnityEngine.SerializeField] private Configs.ConfigStorage _configStorage;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _uiServiceContainer;
 
         private Data.ICoreData _coreData;
         private Services.IUpdaterService _updater;
@@ -16,7 +17,7 @@
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal void CreateCoreData()
         {
-            _coreData = new Data.CoreData(this, _configStorage);
+            _coreData = new Data.CoreData(this, _configStorage, _uiServiceContainer);
 
             _updater = _coreData.ServiceStorage.GetService<Services.IUpdaterService>();
 

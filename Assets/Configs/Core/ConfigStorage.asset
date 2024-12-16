@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78001ca71f125524e96eff0f6ab2e1e1, type: 3}
   m_Name: ConfigStorage
   m_EditorClassIdentifier: 
+  _uiServiceConfig: {fileID: 11400000, guid: bbf4dee75c5cd6946b6602c0f60dd197, type: 2}
   _uiFactoryConfig: {fileID: 11400000, guid: b1379f6ea25125543badd0a9a412f2c3, type: 2}

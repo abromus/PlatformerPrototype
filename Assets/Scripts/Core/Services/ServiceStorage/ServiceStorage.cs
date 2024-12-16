@@ -5,10 +5,17 @@
         private readonly Data.ICoreData _coreData;
         private readonly System.Collections.Generic.Dictionary<System.Type, IService> _services;
 
-        internal ServiceStorage(UnityEngine.MonoBehaviour coroutineRunner, Data.CoreData coreData)
+        internal ServiceStorage(
+            UnityEngine.MonoBehaviour coroutineRunner,
+            Data.CoreData coreData,
+            UnityEngine.Transform uiServiceContainer)
         {
             _coreData = coreData;
 
+            UnityEngine.Object.DontDestroyOnLoad(uiServiceContainer);
+
+            var uiServices = _coreData.ConfigStorage.GetConfig<Configs.IUiServiceConfig>().UiServices;
+            var cameraService = InitCameraService(uiServices, uiServiceContainer);
             var inputService = InitInputService();
             var sceneLoader = InitSceneLoader(coroutineRunner);
             var stateMachine = InitStateMachine(sceneLoader);
@@ -16,6 +23,7 @@
 
             _services = new(8)
             {
+                [typeof(ICameraService)] = cameraService,
                 [typeof(IInputService)] = inputService,
                 [typeof(ISceneLoader)] = sceneLoader,
                 [typeof(IStateMachine)] = stateMachine,
@@ -37,6 +45,16 @@
                 service.Destroy();
 
             _services.Clear();
+        }
+
+        private ICameraService InitCameraService(IUiService[] uiServices, UnityEngine.Transform uiServiceContainer)
+        {
+            var cameraServicePrefab = GetService<ICameraService>(uiServices);
+            var cameraService = InstantiateUiService(cameraServicePrefab as BaseUiService, uiServiceContainer) as ICameraService;
+            cameraService.Init(uiServiceContainer);
+            cameraService.AttachTo(uiServiceContainer);
+
+            return cameraService;
         }
 
         private IInputService InitInputService()
@@ -70,6 +88,27 @@
             var updaterService = new UpdaterService();
 
             return updaterService;
+        }
+
+        private TService GetService<TService>(IUiService[] uiServices) where TService : class, IService
+        {
+            for (int i = 0; i < uiServices.Length; i++)
+            {
+                var uiService = uiServices[i];
+
+                if (uiService is TService service)
+                    return service;
+            }
+
+            return null;
+        }
+
+        private BaseUiService InstantiateUiService(BaseUiService uiServicePrefab, UnityEngine.Transform uiServiceContainer)
+        {
+            var uiService = UnityEngine.Object.Instantiate(uiServicePrefab, uiServiceContainer);
+            uiService.gameObject.RemoveCloneSuffix();
+
+            return uiService;
         }
     }
 }

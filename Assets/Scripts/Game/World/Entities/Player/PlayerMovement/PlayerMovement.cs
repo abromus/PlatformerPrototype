@@ -49,6 +49,24 @@
             position.x += _moveXDirection * _movementXSensitivity * deltaTime;
 
             _transform.position = position;
+
+            CheckDirection();
+        }
+
+        private void CheckDirection()
+        {
+            var localScale = _transform.localScale;
+
+            if (localScale.x == Constants.Left && _moveXDirection == Constants.Right)
+            {
+                localScale.x = Constants.Right;
+                _transform.localScale = localScale;
+            }
+            else if (localScale.x == Constants.Right && _moveXDirection == Constants.Left)
+            {
+                localScale.x = Constants.Left;
+                _transform.localScale = localScale;
+            }
         }
     }
 }
