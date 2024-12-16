@@ -5,12 +5,16 @@
     {
         [UnityEngine.SerializeField] private float _movementXSensitivity;
         [UnityEngine.Space]
+        [UnityEngine.SerializeField] private float _hp;
+        [UnityEngine.Space]
         //Если появятся виды оружия, то вынести в отдельный конфиг
         [UnityEngine.SerializeField] private float _singleShootingDelay = .5f;
         [UnityEngine.SerializeField] private float _continuousShootingDelay = 0.25f;
         [UnityEngine.SerializeField] private UnityEngine.Vector3 _projectileOffset;
 
         public float MovementXSensitivity => _movementXSensitivity;
+
+        public float Hp => _hp;
 
         public float SingleShootingDelay => _singleShootingDelay;
 

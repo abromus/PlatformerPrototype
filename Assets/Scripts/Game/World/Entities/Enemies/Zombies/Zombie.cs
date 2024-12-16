@@ -7,6 +7,7 @@
         [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
 
         private Core.Services.IUpdaterService _updaterService;
+        private float _damage;
 
         private int _index;
 
@@ -17,11 +18,14 @@
 
         public override UnityEngine.Vector2 Size => _size;
 
+        public override float Damage => _damage;
+
         public override event System.Action<IEnemy> Dead;
 
         public override void Init(in EnemyArgs args)
         {
             _updaterService = args.UpdaterService;
+            _damage = args.Damage;
 
             InitModules(in args);
         }
@@ -83,7 +87,7 @@
 
         private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
         {
-            if (collision.TryGetComponent<IDamagable>(out var damagable) == false)
+            if (collision.TryGetComponent<Projectiles.IProjectile>(out var damagable) == false)
                 return;
 
             _health.Change(-damagable.Damage);

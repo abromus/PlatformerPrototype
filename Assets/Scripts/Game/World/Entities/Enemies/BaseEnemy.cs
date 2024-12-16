@@ -8,6 +8,8 @@
 
         public abstract UnityEngine.Vector2 Size { get; }
 
+        public abstract float Damage { get; }
+
         public abstract event System.Action<IEnemy> Dead;
 
         public abstract void Init(in EnemyArgs args);

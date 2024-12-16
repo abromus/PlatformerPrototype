@@ -40,11 +40,8 @@
             {
                 var enemyInfo = enemyInfos[i];
                 var index = enemyInfo.Index;
-                var hp = enemyInfo.Hp;
-                var speed = enemyInfo.Speed;
-                var enemyPrefab = enemyInfo.BaseEnemyPrefab;
 
-                _pools.Add(index, new Core.ObjectPool<IEnemy>(() => CreateEnemy(index, hp, speed, enemyPrefab, _enemyContainer)));
+                _pools.Add(index, new Core.ObjectPool<IEnemy>(() => CreateEnemy(in enemyInfo, _enemyContainer)));
             }
         }
 
@@ -86,10 +83,11 @@
             Destroy();
         }
 
-        private IEnemy CreateEnemy(int enemyIndex, float hp, float speed, BaseEnemy enemyPrefab, UnityEngine.Transform enemyContainer)
+        private IEnemy CreateEnemy(in Configs.EnemyInfo info, UnityEngine.Transform enemyContainer)
         {
-            var args = new EnemyArgs(_updaterService, hp, speed, _player);
-            var enemy = _factory.Create(enemyPrefab, enemyContainer);
+            var args = new EnemyArgs(_updaterService, info.Hp, info.Speed, info.Damage, _player);
+            var enemyIndex = info.Index;
+            var enemy = _factory.Create(info.BaseEnemyPrefab, enemyContainer);
             enemy.Init(in args);
             enemy.SetIndex(enemyIndex);
 

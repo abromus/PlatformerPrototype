@@ -8,9 +8,11 @@ namespace PlatformerPrototype.Game.World.Entities
         private Data.IGameData _gameData;
         private UnityEngine.Transform _projectileContainer;
         private Core.Services.IUpdaterService _updaterService;
+
         private IPlayerInput _input;
         private IPlayerMovement _movement;
         private IPlayerShooting _shooting;
+        private IPlayerHealth _health;
 
         public UnityEngine.Transform Transform => transform;
 
@@ -61,6 +63,14 @@ namespace PlatformerPrototype.Game.World.Entities
             _shooting.Destroy();
         }
 
+        private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+        {
+            if (collision.TryGetComponent<IEnemy>(out var damagable) == false)
+                return;
+
+            _health.Change(-damagable.Damage);
+        }
+
         private void OnDestroy()
         {
             Destroy();
@@ -77,18 +87,21 @@ namespace PlatformerPrototype.Game.World.Entities
             
             _input = new PlayerInput(inputService);
 
-            var playerMovementArgs = new PlayerMovementArgs(_input, transform, playerConfig);
-            _movement = new PlayerMovement(in playerMovementArgs);
+            var movementArgs = new PlayerMovementArgs(_input, transform, playerConfig);
+            _movement = new PlayerMovement(in movementArgs);
 
             var projectileFactory = _gameData.FactoryStorage.GetFactory<Factories.IProjectileFactory>();
-            var playerShootingArgs = new PlayerShootingArgs(
+            var shootingArgs = new PlayerShootingArgs(
                 _input,
                 transform,
                 projectileFactory,
                 _projectilePrefab,
                 _projectileContainer,
                 playerConfig);
-            _shooting = new PlayerShooting(in playerShootingArgs);
+            _shooting = new PlayerShooting(in shootingArgs);
+
+            _health = new PlayerHealth(playerConfig.Hp);
+
             //var animator = new PlayerAnimator(_animator);
         }
 
@@ -98,6 +111,8 @@ namespace PlatformerPrototype.Game.World.Entities
             _updaterService.AddFixedUpdatable(this);
             _updaterService.AddLateUpdatable(this);
             _updaterService.AddPausable(this);
+
+            _health.Dead += OnDead;
         }
 
         private void Unsubscribe()
@@ -109,6 +124,15 @@ namespace PlatformerPrototype.Game.World.Entities
                 _updaterService.RemoveLateUpdatable(this);
                 _updaterService.RemovePausable(this);
             }
+
+            _health.Dead -= OnDead;
+        }
+
+        private void OnDead()
+        {
+#if UNITY_EDITOR
+            UnityEngine.Debug.Log($"Dead");
+#endif
         }
     }
 }

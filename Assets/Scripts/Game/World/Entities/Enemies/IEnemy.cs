@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.World.Entities
 {
-    internal interface IEnemy : IEntity, Core.IPoolable
+    internal interface IEnemy : IEntity, Core.IPoolable, IDamagable
     {
         public int Index { get; }
 

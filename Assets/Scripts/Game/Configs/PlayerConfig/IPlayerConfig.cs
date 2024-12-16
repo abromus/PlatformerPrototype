@@ -4,6 +4,8 @@
     {
         public float MovementXSensitivity { get; }
 
+        public float Hp { get; }
+
         public float SingleShootingDelay { get; }
 
         public float ContinuousShootingDelay { get; }
