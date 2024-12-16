@@ -1,6 +1,6 @@
 namespace PlatformerPrototype.Game.World.Entities
 {
-    internal interface IPlayer : IEntity, Core.Services.IFixedUpdatable, Core.Services.ILateUpdatable
+    internal interface IPlayer : IEntity, Core.Services.IUpdatable, Core.Services.ILateUpdatable
     {
         public UnityEngine.Transform Transform { get; }
 

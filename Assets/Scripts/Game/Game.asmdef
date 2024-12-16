@@ -2,7 +2,8 @@
     "name": "Game",
     "rootNamespace": "PlatformerPrototype.Game",
     "references": [
-        "Core"
+        "Core",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

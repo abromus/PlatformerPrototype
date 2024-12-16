@@ -1,6 +1,11 @@
 ﻿namespace PlatformerPrototype.Game.World.Projectiles
 {
-    internal interface IProjectile : Core.IPoolable, Core.Services.IUpdatable, Core.Services.IPausable, Core.IDestroyable
+    internal interface IProjectile : 
+        Core.IPoolable,
+        Core.Services.IUpdatable,
+        Core.Services.IPausable,
+        Core.IDestroyable,
+        IDamagable
     {
         public event System.Action<IProjectile> Destroyed;
 

@@ -8,9 +8,13 @@
 
         public event System.Action<IEnemy> Dead;
 
-        public void Init(Core.Services.IUpdaterService updaterSevice, float speed);
+        public void Init(in EnemyArgs args);
 
-        public void InitPosition(UnityEngine.Vector3 position, UnityEngine.Transform player);
+        public void InitHp();
+
+        public void Activate();
+
+        public void InitPosition(UnityEngine.Vector3 position);
 
         public abstract void SetIndex(int index);
     }

@@ -2,6 +2,9 @@
 {
     internal abstract class BaseProjectile : UnityEngine.MonoBehaviour, IProjectile
     {
+        public abstract float Damage { get; }
+
+
         public abstract event System.Action<IProjectile> Destroyed;
 
         public abstract void Init(Core.Services.IUpdaterService updaterSevice);

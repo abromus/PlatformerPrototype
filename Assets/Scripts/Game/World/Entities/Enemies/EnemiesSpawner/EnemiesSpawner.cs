@@ -40,10 +40,11 @@
             {
                 var enemyInfo = enemyInfos[i];
                 var index = enemyInfo.Index;
+                var hp = enemyInfo.Hp;
                 var speed = enemyInfo.Speed;
                 var enemyPrefab = enemyInfo.BaseEnemyPrefab;
 
-                _pools.Add(index, new Core.ObjectPool<IEnemy>(() => CreateEnemy(index, speed, enemyPrefab, _enemyContainer)));
+                _pools.Add(index, new Core.ObjectPool<IEnemy>(() => CreateEnemy(index, hp, speed, enemyPrefab, _enemyContainer)));
             }
         }
 
@@ -85,10 +86,11 @@
             Destroy();
         }
 
-        private IEnemy CreateEnemy(int enemyIndex, float speed, BaseEnemy enemyPrefab, UnityEngine.Transform enemyContainer)
+        private IEnemy CreateEnemy(int enemyIndex, float hp, float speed, BaseEnemy enemyPrefab, UnityEngine.Transform enemyContainer)
         {
+            var args = new EnemyArgs(_updaterService, hp, speed, _player);
             var enemy = _factory.Create(enemyPrefab, enemyContainer);
-            enemy.Init(_updaterService, speed);
+            enemy.Init(in args);
             enemy.SetIndex(enemyIndex);
 
             if (_enemies.ContainsKey(enemyIndex))
@@ -136,8 +138,10 @@
             var screenOffset = _screenRect.size.x + halfSize;
             position.x = direction == Constants.Left ? position.x - screenOffset : position.x + screenOffset;
 
-            enemy.InitPosition(position, _player);
             enemy.Dead += OnEnemyDead;
+            enemy.InitPosition(position);
+            enemy.InitHp();
+            enemy.Activate();
         }
 
         private void CheckSpawnDelay(float deltaTime)

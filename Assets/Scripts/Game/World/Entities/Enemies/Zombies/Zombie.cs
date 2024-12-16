@@ -2,15 +2,16 @@
 {
     internal sealed class Zombie : BaseEnemy
     {
+        [UnityEngine.SerializeField] private Health.HealthView _healthView;
         [UnityEngine.SerializeField] private UnityEngine.Rigidbody2D _rigidbody;
         [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
 
         private Core.Services.IUpdaterService _updaterService;
-        private UnityEngine.Transform _player;
 
         private int _index;
-        private float _speed;
-        private bool _isPaused;
+
+        private IZombieMovement _movement;
+        private IZombieHealth _health;
 
         public override int Index => _index;
 
@@ -18,18 +19,27 @@
 
         public override event System.Action<IEnemy> Dead;
 
-        public override void Init(Core.Services.IUpdaterService updaterSevice, float speed)
+        public override void Init(in EnemyArgs args)
         {
-            _updaterService = updaterSevice;
-            _speed = speed;
+            _updaterService = args.UpdaterService;
+
+            InitModules(in args);
         }
 
-        public override void InitPosition(UnityEngine.Vector3 position, UnityEngine.Transform player)
+        public override void InitPosition(UnityEngine.Vector3 position)
         {
             transform.position = position;
+        }
 
-            _player = player;
+        public override void InitHp()
+        {
+            _health.InitHp();
+        }
+
+        public override void Activate()
+        {
             _rigidbody.simulated = true;
+            _health.SetActive(true);
 
             gameObject.SetActive(true);
 
@@ -37,15 +47,15 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public override void Tick(float deltaTime)
+        public override void FixedTick(float deltaTime)
         {
-            Move(deltaTime);
+            _movement.FixedTick(deltaTime);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void SetPause(bool isPaused)
         {
-            _isPaused = isPaused;
+            _movement.SetPause(isPaused);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -66,14 +76,17 @@
         {
             Unsubscribe();
 
+            _health.SetActive(false);
+
             gameObject.SetActive(false);
         }
 
         private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
         {
-            _rigidbody.simulated = false;
+            if (collision.TryGetComponent<IDamagable>(out var damagable) == false)
+                return;
 
-            Dead?.Invoke(this);
+            _health.Change(-damagable.Damage);
         }
 
         private void OnDestroy()
@@ -81,31 +94,39 @@
             Destroy();
         }
 
-        private void Move(float deltaTime)
+        private void InitModules(in EnemyArgs args)
         {
-            if (_isPaused || _player == null)
-                return;
+            var movementArgs = new ZombieMovementArgs(args.Player, transform, args.Speed);
+            _movement = new ZombieMovement(in movementArgs);
 
-            var position = transform.position;
-            var direction = _player.position.x < position.x ? Constants.Left : Constants.Right;
-            position.x += _speed * deltaTime * direction;
-
-            transform.position = position;
+            var healthArgs = new ZombieHealthArgs(_healthView, args.Hp);
+            _health = new ZombieHealth(in healthArgs);
         }
 
         private void Subscribe()
         {
-            _updaterService.AddUpdatable(this);
+            _updaterService.AddFixedUpdatable(this);
             _updaterService.AddPausable(this);
+
+            _health.Dead += OnDead;
         }
 
         private void Unsubscribe()
         {
             if (_updaterService != null)
             {
-                _updaterService.RemoveUpdatable(this);
+                _updaterService.RemoveFixedUpdatable(this);
                 _updaterService.RemovePausable(this);
             }
+
+            _health.Dead -= OnDead;
+        }
+
+        private void OnDead()
+        {
+            _rigidbody.simulated = false;
+
+            Dead?.Invoke(this);
         }
     }
 }

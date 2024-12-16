@@ -3,6 +3,7 @@
     internal sealed class Projectile : BaseProjectile
     {
         [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
+        [UnityEngine.SerializeField] private float _damage;
         [UnityEngine.SerializeField] private float _speed;
         [UnityEngine.SerializeField] private float _existenceTime;
 
@@ -10,6 +11,8 @@
         private UnityEngine.Vector3 _direction;
         private float _movingTime;
         private bool _isPaused;
+
+        public override float Damage => _damage;
 
         public override event System.Action<IProjectile> Destroyed;
 

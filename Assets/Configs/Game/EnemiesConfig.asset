@@ -18,14 +18,14 @@ MonoBehaviour:
   _maxSpawnDelay: 10
   _enemies:
   - _index: 1
-    _hp: 3
+    _hp: 2
     _speed: 1
     _baseZombiePrefab: {fileID: -6478331589083273028, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
   - _index: 2
-    _hp: 5
+    _hp: 6
     _speed: 2
     _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}
   - _index: 3
-    _hp: 5
-    _speed: 10
+    _hp: 4
+    _speed: 3
     _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}

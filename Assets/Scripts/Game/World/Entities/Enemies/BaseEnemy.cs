@@ -10,11 +10,15 @@
 
         public abstract event System.Action<IEnemy> Dead;
 
-        public abstract void Init(Core.Services.IUpdaterService updaterSevice, float speed);
+        public abstract void Init(in EnemyArgs args);
 
-        public abstract void InitPosition(UnityEngine.Vector3 position, UnityEngine.Transform player);
+        public abstract void InitPosition(UnityEngine.Vector3 position);
 
-        public abstract void Tick(float deltaTime);
+        public abstract void InitHp();
+
+        public abstract void Activate();
+
+        public abstract void FixedTick(float deltaTime);
 
         public abstract void SetPause(bool isPaused);
 
