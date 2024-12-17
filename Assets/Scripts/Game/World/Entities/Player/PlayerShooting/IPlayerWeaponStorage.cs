@@ -2,6 +2,8 @@
 {
     internal interface IPlayerWeaponStorage
     {
+        public int CurrentAmmo { get; }
+
         public void Tick(float deltaTime);
 
         public void SetPause(bool isPaused);

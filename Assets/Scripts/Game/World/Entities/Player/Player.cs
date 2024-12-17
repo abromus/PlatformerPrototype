@@ -118,14 +118,21 @@ namespace PlatformerPrototype.Game.World.Entities
         private void Subscribe()
         {
             _health.Dead += OnDead;
+            _shooting.AmmoOut += OnAmmoOut;
         }
 
         private void Unsubscribe()
         {
             _health.Dead -= OnDead;
+            _shooting.AmmoOut -= OnAmmoOut;
         }
 
         private void OnDead()
+        {
+            Dead?.Invoke();
+        }
+
+        private void OnAmmoOut()
         {
             Dead?.Invoke();
         }

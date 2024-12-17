@@ -15,6 +15,8 @@
         private readonly Core.IObjectPool<Projectiles.IProjectile> _pool;
         private readonly System.Collections.Generic.List<Projectiles.IProjectile> _projectiles = new(64);
 
+        public event System.Action AmmoOut;
+
         internal PlayerShooting(in PlayerShootingArgs args)
         {
             _playerInput = args.PlayerInput;
@@ -42,8 +44,11 @@
             if (_isShooting == false)
                 return;
 
-            if (_weaponStorage.TryShoot(_playerInput.ShootingMode, out var index))
+            if (_weaponStorage.CurrentAmmo == 0)
+                AmmoOut?.Invoke();
+            else if (_weaponStorage.TryShoot(_playerInput.ShootingMode, out var index))
                 InitProjectile(index);
+
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

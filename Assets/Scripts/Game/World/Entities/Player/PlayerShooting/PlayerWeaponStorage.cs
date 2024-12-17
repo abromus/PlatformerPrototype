@@ -9,8 +9,11 @@ namespace PlatformerPrototype.Game.World.Entities
         private bool _isPaused;
         private float _shootingDelay;
         private float _maxShootingDelay;
+        private int _currentAmmo;
 
         private readonly WeaponInfo[] _weaponInfos;
+
+        public int CurrentAmmo => _currentAmmo;
 
         internal PlayerWeaponStorage(in WeaponInfo[] weaponInfos)
         {
@@ -49,6 +52,8 @@ namespace PlatformerPrototype.Game.World.Entities
 
             _canShooting = false;
 
+            --_currentAmmo;
+
             InitShootingDelay(shootingMode);
 
             index = _currentIndex;
@@ -58,13 +63,14 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public void AddAmmo(int count)
         {
-            UnityEngine.Debug.Log($"Add {count} ammo");
+            _currentAmmo += count;
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void InitRandomWeapon()
         {
             _currentIndex = UnityEngine.Random.Range(0, _weaponInfos.Length);
+            _currentAmmo = _weaponInfos[_currentIndex].Capacity;
         }
 
         private void CheckShootingDelay(float deltaTime)
