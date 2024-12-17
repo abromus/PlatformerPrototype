@@ -6,9 +6,13 @@
 
         public abstract int Index { get; }
 
+        public abstract UnityEngine.Vector3 Position { get; }
+
         public abstract UnityEngine.Vector2 Size { get; }
 
         public abstract float Damage { get; }
+
+        public abstract Configs.IDropConfig DropConfig { get; }
 
         public abstract event System.Action<IEnemy> Dead;
 

@@ -9,5 +9,7 @@
         public void Restart();
 
         public bool TryShoot(ShootingMode shootingMode, out int index);
+
+        public void AddAmmo(int count);
     }
 }

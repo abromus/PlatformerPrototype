@@ -11,6 +11,7 @@
         private UnityEngine.Vector3 _direction;
         private float _movingTime;
         private bool _isPaused;
+        private bool _isDestroyed;
 
         public override float Damage => _damage;
 
@@ -27,6 +28,11 @@
             transform.position = position;
 
             _direction.x = direction;
+        }
+
+        public override void Activate()
+        {
+            _isDestroyed = false;
             _movingTime = 0f;
 
             gameObject.SetActive(true);
@@ -58,10 +64,15 @@
             Unsubscribe();
 
             gameObject.SetActive(false);
+
+            _isDestroyed = true;
         }
 
         private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
         {
+            if (_isDestroyed)
+                return;
+
             Destroyed?.Invoke(this);
         }
 

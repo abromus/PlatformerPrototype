@@ -7,6 +7,7 @@
         private readonly Factories.IEnemyFactory _enemyFactory;
         private readonly Configs.IEnemiesConfig _enemyConfig;
         private readonly UnityEngine.Transform _player;
+        private readonly UnityEngine.Transform _enemyContainer;
 
         internal readonly Core.Services.ICameraService CameraService => _cameraService;
 
@@ -16,16 +17,20 @@
 
         internal readonly UnityEngine.Transform Player => _player;
 
+        internal readonly UnityEngine.Transform EnemyContainer => _enemyContainer;
+
         internal EnemiesSpawnerArgs(
             Core.Services.ICameraService cameraService,
             Factories.IEnemyFactory enemyFactory,
             Configs.IEnemiesConfig enemyConfig,
-            UnityEngine.Transform player)
+            UnityEngine.Transform player,
+            UnityEngine.Transform enemyContainer)
         {
             _cameraService = cameraService;
             _enemyFactory = enemyFactory;
             _enemyConfig = enemyConfig;
             _player = player;
+            _enemyContainer = enemyContainer;
         }
     }
 }

@@ -8,21 +8,28 @@
 
         private int _index;
         private float _damage;
+        private bool _isDead;
+        private Configs.IDropConfig _dropConfig;
 
         private IZombieMovement _movement;
         private IZombieHealth _health;
 
         public override int Index => _index;
 
+        public override UnityEngine.Vector3 Position => transform.position;
+
         public override UnityEngine.Vector2 Size => _size;
 
         public override float Damage => _damage;
+
+        public override Configs.IDropConfig DropConfig => _dropConfig;
 
         public override event System.Action<IEnemy> Dead;
 
         public override void Init(in EnemyArgs args)
         {
             _damage = args.Damage;
+            _dropConfig = args.DropConfig;
 
             InitModules(in args);
         }
@@ -39,6 +46,7 @@
 
         public override void Activate()
         {
+            _isDead = false;
             _rigidbody.simulated = true;
             _health.SetActive(true);
 
@@ -116,6 +124,10 @@
 
         private void OnDead()
         {
+            if (_isDead)
+                return;
+
+            _isDead = true;
             _rigidbody.simulated = false;
 
             Dead?.Invoke(this);

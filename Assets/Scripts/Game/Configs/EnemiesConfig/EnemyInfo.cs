@@ -9,6 +9,7 @@
         [UnityEngine.SerializeField] private float _speed;
         [UnityEngine.SerializeField] private float _damage;
         [UnityEngine.SerializeField] private World.Entities.BaseEnemy _baseZombiePrefab;
+        [UnityEngine.SerializeField] private DropConfig _dropConfig;
 
         internal readonly int Index => _index;
 
@@ -19,5 +20,7 @@
         internal readonly float Damage => _damage;
 
         internal readonly World.Entities.BaseEnemy BaseEnemyPrefab => _baseZombiePrefab;
+
+        internal readonly IDropConfig DropConfig => _dropConfig;
     }
 }

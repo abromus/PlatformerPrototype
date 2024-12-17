@@ -2,7 +2,7 @@ namespace PlatformerPrototype.Game.World.Entities
 {
     internal interface IEnemiesSpawner : Core.IDestroyable, IRestartable
     {
-        public void Init(in EnemiesSpawnerArgs args);
+        public event System.Action<Configs.IDropConfig, UnityEngine.Vector3> Dropped;
 
         public void Tick(float deltaTime);
 

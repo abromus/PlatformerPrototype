@@ -1,12 +1,7 @@
 ﻿namespace PlatformerPrototype.Game.World.Entities
 {
-    internal sealed class EnemiesSpawner : UnityEngine.MonoBehaviour, IEnemiesSpawner
+    internal sealed class EnemiesSpawner : IEnemiesSpawner
     {
-        [UnityEngine.SerializeField] private UnityEngine.Transform _enemyContainer;
-
-        private Factories.IEnemyFactory _factory;
-        private Configs.IEnemiesConfig _config;
-        private UnityEngine.Transform _player;
         private UnityEngine.Rect _screenRect;
 
         private bool _canSpawn;
@@ -14,14 +9,22 @@
         private float _spawnDelay;
         private float _maxSpawnDelay;
 
+        private readonly Factories.IEnemyFactory _factory;
+        private readonly Configs.IEnemiesConfig _config;
+        private readonly UnityEngine.Transform _player;
+        private readonly UnityEngine.Transform _enemyContainer;
+
         private readonly System.Collections.Generic.Dictionary<int, Core.IObjectPool<IEnemy>> _pools = new(16);
         private readonly System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<IEnemy>> _enemies = new(8);
 
-        public void Init(in EnemiesSpawnerArgs args)
+        public event System.Action<Configs.IDropConfig, UnityEngine.Vector3> Dropped;
+
+        internal EnemiesSpawner(in EnemiesSpawnerArgs args)
         {
             _factory = args.EnemyFactory;
             _config = args.EnemyConfig;
             _player = args.Player;
+            _enemyContainer = args.EnemyContainer;
             _screenRect = args.CameraService.GetScreenRect();
 
             InitPools();
@@ -109,14 +112,9 @@
             _enemies.Clear();
         }
 
-        private void OnDestroy()
-        {
-            Destroy();
-        }
-
         private IEnemy CreateEnemy(in Configs.EnemyInfo info, UnityEngine.Transform enemyContainer)
         {
-            var args = new EnemyArgs(info.Hp, info.Speed, info.Damage, _player);
+            var args = new EnemyArgs(info.Hp, info.Speed, info.Damage, info.DropConfig, _player);
             var enemyIndex = info.Index;
             var enemy = _factory.Create(info.BaseEnemyPrefab, enemyContainer);
             enemy.Init(in args);
@@ -159,13 +157,14 @@
                 : Constants.Right;
             var position = _player.position;
             var halfSize = Constants.Half * enemy.Size.x;
+            var spawnOffset = UnityEngine.Random.Range(_config.MinSpawnOffset, _config.MaxSpawnOffset);
             var screenOffset = _screenRect.size.x + halfSize;
-            position.x = direction == Constants.Left ? position.x - screenOffset : position.x + screenOffset;
+            position.x = direction == Constants.Left ? position.x - spawnOffset - screenOffset : position.x + spawnOffset + screenOffset;
 
-            enemy.Dead += OnEnemyDead;
             enemy.InitPosition(position);
             enemy.InitHp();
             enemy.Activate();
+            enemy.Dead += OnEnemyDead;
 
             if (_enemies.ContainsKey(enemyIndex))
                 _enemies[enemyIndex].Add(enemy);
@@ -202,14 +201,8 @@
 
             _enemies[index].Remove(enemy);
             _pools[index].Release(enemy);
-        }
 
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            UnityEngine.Gizmos.color = UnityEngine.Color.red;
-            UnityEngine.Gizmos.DrawWireCube(transform.position, _screenRect.size);
+            Dropped?.Invoke(enemy.DropConfig, enemy.Position);
         }
-#endif
     }
 }

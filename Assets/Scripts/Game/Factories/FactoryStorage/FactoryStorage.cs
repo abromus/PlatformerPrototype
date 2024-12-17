@@ -2,10 +2,9 @@
 {
     internal sealed class FactoryStorage : Core.Factories.IFactoryStorage
     {
-        private System.Collections.Generic.Dictionary<System.Type, Core.Factories.IFactory> _factories;
-
         private readonly Data.IGameData _gameData;
         private readonly Core.Configs.IConfigStorage _configStorage;
+        private readonly System.Collections.Generic.Dictionary<System.Type, Core.Factories.IFactory> _factories;
 
         internal FactoryStorage(Data.IGameData gameData, Core.Configs.IConfigStorage configStorage)
         {
@@ -14,6 +13,7 @@
 
             var updater = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IUpdaterService>();
             var uiFactories = _configStorage.GetConfig<Core.Configs.IUiFactoryConfig>().UiFactories;
+            var dropFactory = InitDropFactory(uiFactories);
             var enemyFactory = InitEnemyFactory(uiFactories);
             var playerFactory = InitPlayerFactory(uiFactories);
             var projectileFactory = InitProjectileFactory(uiFactories, updater);
@@ -21,6 +21,7 @@
 
             _factories = new(8)
             {
+                [typeof(IDropFactory)] = dropFactory,
                 [typeof(IEnemyFactory)] = enemyFactory,
                 [typeof(IPlayerFactory)] = playerFactory,
                 [typeof(IProjectileFactory)] = projectileFactory,
@@ -32,6 +33,13 @@
         public TFactory GetFactory<TFactory>() where TFactory : class, Core.Factories.IFactory
         {
             return _factories[typeof(TFactory)] as TFactory;
+        }
+
+        private IDropFactory InitDropFactory(Core.Factories.IUiFactory[] uiFactories)
+        {
+            var dropFactory = GetFactory<IDropFactory>(uiFactories);
+
+            return dropFactory;
         }
 
         private IEnemyFactory InitEnemyFactory(Core.Factories.IUiFactory[] uiFactories)

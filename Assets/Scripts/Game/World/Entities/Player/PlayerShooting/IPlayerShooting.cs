@@ -7,5 +7,7 @@
         public void FixedTick(float deltaTime);
 
         public void SetPause(bool isPaused);
+
+        public void AddAmmo(int count);
     }
 }

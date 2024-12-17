@@ -56,6 +56,11 @@ namespace PlatformerPrototype.Game.World.Entities
             return true;
         }
 
+        public void AddAmmo(int count)
+        {
+            UnityEngine.Debug.Log($"Add {count} ammo");
+        }
+
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void InitRandomWeapon()
         {

@@ -2,9 +2,8 @@
 {
     internal sealed class FactoryStorage : IFactoryStorage
     {
-        private System.Collections.Generic.Dictionary<System.Type, IFactory> _factories;
-
         private readonly Configs.IConfigStorage _configStorage;
+        private readonly System.Collections.Generic.Dictionary<System.Type, IFactory> _factories;
 
         internal FactoryStorage(Configs.IConfigStorage configStorage)
         {

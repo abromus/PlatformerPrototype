@@ -11,6 +11,7 @@ namespace PlatformerPrototype.Game.World.Entities
         private IPlayerMovement _movement;
         private IPlayerShooting _shooting;
         private IPlayerHealth _health;
+        private IPlayerDropConsumer _dropConsumer;
 
         public UnityEngine.Transform Transform => transform;
 
@@ -71,10 +72,16 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
         {
-            if (collision.TryGetComponent<IEnemy>(out var damagable) == false)
-                return;
+            if (collision.TryGetComponent<Drops.IDrop>(out var drop))
+            {
+                _dropConsumer.Apply(drop);
 
-            _health.Change(-damagable.Damage);
+                drop.Apply();
+            }
+            else if (collision.TryGetComponent<IEnemy>(out var damagable))
+            {
+                _health.Change(-damagable.Damage);
+            }
         }
 
         private void OnDestroy()
@@ -102,6 +109,8 @@ namespace PlatformerPrototype.Game.World.Entities
             _shooting = new PlayerShooting(in shootingArgs);
 
             _health = new PlayerHealth(playerConfig.Hp);
+
+            _dropConsumer = new PlayerDropConsumer(_shooting);
 
             //var animator = new PlayerAnimator(_animator);
         }

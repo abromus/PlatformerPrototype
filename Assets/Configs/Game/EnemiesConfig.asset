@@ -16,19 +16,24 @@ MonoBehaviour:
   _maxSpawnCount: 10
   _minSpawnDelay: 1
   _maxSpawnDelay: 10
+  _minSpawnOffset: 4
+  _maxSpawnOffset: 10
   _enemies:
   - _index: 1
     _hp: 2
     _speed: 1
     _damage: 1
     _baseZombiePrefab: {fileID: -6478331589083273028, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+    _dropConfig: {fileID: 11400000, guid: f81d2bfa26a91824fbe488f620d016c1, type: 2}
   - _index: 2
     _hp: 6
     _speed: 2
     _damage: 1
     _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}
+    _dropConfig: {fileID: 11400000, guid: f81d2bfa26a91824fbe488f620d016c1, type: 2}
   - _index: 3
     _hp: 4
     _speed: 3
     _damage: 1
     _baseZombiePrefab: {fileID: 3015310955207581188, guid: a0a4e5640c463b24da459356d7f41e94, type: 3}
+    _dropConfig: {fileID: 11400000, guid: cc315ed37a199ba47994ea49b1b1bcf7, type: 2}

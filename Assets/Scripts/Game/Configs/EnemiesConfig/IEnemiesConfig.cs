@@ -11,5 +11,9 @@
         public float MinSpawnDelay { get; }
 
         public float MaxSpawnDelay { get; }
+
+        public float MinSpawnOffset { get; }
+
+        public float MaxSpawnOffset { get; }
     }
 }

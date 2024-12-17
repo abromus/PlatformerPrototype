@@ -62,6 +62,15 @@
             _weaponStorage.Restart();
         }
 
+        public void AddAmmo(int count)
+        {
+#if UNITY_EDITOR
+            UnityEngine.Assertions.Assert.IsTrue(0 < count);
+#endif
+
+            _weaponStorage.AddAmmo(count);
+        }
+
         public void Destroy()
         {
             for (int i = 0; i < _projectiles.Count; i++)
@@ -75,7 +84,6 @@
         {
             var projectilePrefab = _weaponInfos[_currentIndex].ProjectilePrefab;
             var projectile = _factory.Create(projectilePrefab, _projectileContainer);
-            projectile.Destroyed += OnProjectileDestroyed;
 
             _projectiles.Add(projectile);
 
@@ -97,6 +105,7 @@
             var direction = _transform.localScale.x == Constants.Left ? Constants.Left : Constants.Right;
             var position = _transform.position + direction * projectileOffset;
             projectile.InitPosition(position, direction);
+            projectile.Activate();
             projectile.Destroyed += OnProjectileDestroyed;
         }
 
