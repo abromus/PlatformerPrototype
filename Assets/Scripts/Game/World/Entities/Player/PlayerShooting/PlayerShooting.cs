@@ -55,6 +55,14 @@
             _isPaused = isPaused;
         }
 
+        public void Restart()
+        {
+            for (int i = 0; i < _projectiles.Count; i++)
+                _pool.Release(_projectiles[i]);
+
+            _projectiles.Clear();
+        }
+
         public void Destroy()
         {
             for (int i = 0; i < _projectiles.Count; i++)

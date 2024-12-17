@@ -4,7 +4,6 @@
     {
         [UnityEngine.SerializeField] private UnityEngine.Transform _enemyContainer;
 
-        private Core.Services.IUpdaterService _updaterService;
         private Factories.IEnemyFactory _factory;
         private Configs.IEnemiesConfig _config;
         private UnityEngine.Transform _player;
@@ -20,16 +19,12 @@
 
         public void Init(in EnemiesSpawnerArgs args)
         {
-            _updaterService = args.UpdaterService;
             _factory = args.EnemyFactory;
             _config = args.EnemyConfig;
             _player = args.Player;
             _screenRect = args.CameraService.GetScreenRect();
 
-            _canSpawn = true;
-
             InitPools();
-            Subscribe();
         }
 
         private void InitPools()
@@ -51,16 +46,27 @@
             CheckSpawnDelay(deltaTime);
         }
 
+        public void FixedTick(float deltaTime)
+        {
+            FixedTickEnemies(deltaTime);
+        }
+
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void SetPause(bool isPaused)
         {
             _isPaused = isPaused;
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public void Destroy()
+        public void Restart()
         {
-            Unsubscribe();
+            _canSpawn = true;
+            _spawnDelay = 0f;
+        }
+
+        public void Stop()
+        {
+            _canSpawn = false;
+            _spawnDelay = 0f;
 
             foreach (var pair in _enemies)
             {
@@ -69,7 +75,32 @@
                 var pool = _pools[enemyIndex];
 
                 for (int i = 0; i < enemies.Count; i++)
+                {
+                    var enemy = enemies[i];
+                    enemy.Dead -= OnEnemyDead;
+                    enemy.Clear();
+                    enemies.Remove(enemy);
+                    pool.Release(enemy);
+                }
+            }
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void Destroy()
+        {
+            foreach (var pair in _enemies)
+            {
+                var enemyIndex = pair.Key;
+                var enemies = pair.Value;
+                var pool = _pools[enemyIndex];
+
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    var enemy = enemies[i];
+                    enemy.Dead -= OnEnemyDead;
+                    enemy.Clear();
                     pool.Release(enemies[i]);
+                }
 
                 enemies.Clear();
                 pool.Destroy();
@@ -85,16 +116,11 @@
 
         private IEnemy CreateEnemy(in Configs.EnemyInfo info, UnityEngine.Transform enemyContainer)
         {
-            var args = new EnemyArgs(_updaterService, info.Hp, info.Speed, info.Damage, _player);
+            var args = new EnemyArgs(info.Hp, info.Speed, info.Damage, _player);
             var enemyIndex = info.Index;
             var enemy = _factory.Create(info.BaseEnemyPrefab, enemyContainer);
             enemy.Init(in args);
             enemy.SetIndex(enemyIndex);
-
-            if (_enemies.ContainsKey(enemyIndex))
-                _enemies[enemyIndex].Add(enemy);
-            else
-                _enemies.Add(enemyIndex, new(64) { enemy });
 
             return enemy;
         }
@@ -122,10 +148,10 @@
             var enemyIndex = UnityEngine.Random.Range(0, enemyInfos.Length);
             var enemyInfo = enemyInfos[enemyIndex];
 
-            InitEnemy(enemyInfo.Index, enemyInfo);
+            InitEnemy(enemyInfo.Index);
         }
 
-        private void InitEnemy(int enemyIndex, Configs.EnemyInfo enemyInfo)
+        private void InitEnemy(int enemyIndex)
         {
             var enemy = _pools[enemyIndex].Get();
             var direction = UnityEngine.Random.Range(Constants.Left, Constants.Right) < Constants.Zero
@@ -140,6 +166,11 @@
             enemy.InitPosition(position);
             enemy.InitHp();
             enemy.Activate();
+
+            if (_enemies.ContainsKey(enemyIndex))
+                _enemies[enemyIndex].Add(enemy);
+            else
+                _enemies.Add(enemyIndex, new(64) { enemy });
         }
 
         private void CheckSpawnDelay(float deltaTime)
@@ -153,19 +184,13 @@
                 _canSpawn = true;
         }
 
-        private void Subscribe()
+        private void FixedTickEnemies(float deltaTime)
         {
-            _updaterService.AddUpdatable(this);
-            _updaterService.AddPausable(this);
-        }
+            var enemies = _enemies.Values;
 
-        private void Unsubscribe()
-        {
-            if (_updaterService != null)
-            {
-                _updaterService.RemoveUpdatable(this);
-                _updaterService.RemovePausable(this);
-            }
+            foreach (var currentEnemies in enemies)
+                for (int i = 0; i < currentEnemies.Count; i++)
+                    currentEnemies[i].FixedTick(deltaTime);
         }
 
         private void OnEnemyDead(IEnemy enemy)

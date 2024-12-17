@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.World.Entities
 {
-    internal interface IPlayerShooting : Core.IDestroyable
+    internal interface IPlayerShooting : Core.IDestroyable, IRestartable
     {
         public void Tick(float deltaTime);
 

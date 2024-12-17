@@ -25,7 +25,7 @@
         private World.IWorld CreateWorld()
         {
             var factory = _gameData.FactoryStorage.GetFactory<Factories.IWorldFactory>();
-            var world = factory.Create();
+            var world = factory.Create(_stateMachine);
 
             return world;
         }

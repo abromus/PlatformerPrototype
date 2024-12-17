@@ -4,6 +4,6 @@
     {
         public void Init(Data.IGameData gameData);
 
-        public World.IWorld Create();
+        public World.IWorld Create(Core.Services.IStateMachine stateMachine);
     }
 }

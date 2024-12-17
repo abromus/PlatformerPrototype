@@ -6,10 +6,8 @@
         [UnityEngine.SerializeField] private UnityEngine.Rigidbody2D _rigidbody;
         [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
 
-        private Core.Services.IUpdaterService _updaterService;
-        private float _damage;
-
         private int _index;
+        private float _damage;
 
         private IZombieMovement _movement;
         private IZombieHealth _health;
@@ -24,7 +22,6 @@
 
         public override void Init(in EnemyArgs args)
         {
-            _updaterService = args.UpdaterService;
             _damage = args.Damage;
 
             InitModules(in args);
@@ -87,10 +84,10 @@
 
         private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
         {
-            if (collision.TryGetComponent<Projectiles.IProjectile>(out var damagable) == false)
-                return;
-
-            _health.Change(-damagable.Damage);
+            if (collision.TryGetComponent<Projectiles.IProjectile>(out var damagable))
+                _health.Change(-damagable.Damage);
+            else if (collision.TryGetComponent<IPlayer>(out _))
+                OnDead();
         }
 
         private void OnDestroy()
@@ -109,20 +106,11 @@
 
         private void Subscribe()
         {
-            _updaterService.AddFixedUpdatable(this);
-            _updaterService.AddPausable(this);
-
             _health.Dead += OnDead;
         }
 
         private void Unsubscribe()
         {
-            if (_updaterService != null)
-            {
-                _updaterService.RemoveFixedUpdatable(this);
-                _updaterService.RemovePausable(this);
-            }
-
             _health.Dead -= OnDead;
         }
 

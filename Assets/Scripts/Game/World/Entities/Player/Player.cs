@@ -7,7 +7,6 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private Data.IGameData _gameData;
         private UnityEngine.Transform _projectileContainer;
-        private Core.Services.IUpdaterService _updaterService;
 
         private IPlayerInput _input;
         private IPlayerMovement _movement;
@@ -15,6 +14,8 @@ namespace PlatformerPrototype.Game.World.Entities
         private IPlayerHealth _health;
 
         public UnityEngine.Transform Transform => transform;
+
+        public event System.Action Dead;
 
         public void Init(Data.IGameData gameData, UnityEngine.Transform projectileContainer)
         {
@@ -38,11 +39,6 @@ namespace PlatformerPrototype.Game.World.Entities
             _shooting.FixedTick(deltaTime);
         }
 
-        public void LateTick(float deltaTime)
-        {
-
-        }
-
         public void SetPause(bool isPaused)
         {
             _input.SetPause(isPaused);
@@ -53,6 +49,17 @@ namespace PlatformerPrototype.Game.World.Entities
         public void SetParent(UnityEngine.Transform parent)
         {
             transform.SetParent(parent);
+        }
+
+        public void Restart()
+        {
+            transform.position = UnityEngine.Vector3.zero;
+
+            var localScale = transform.localScale;
+            localScale.x = 1f;
+            transform.localScale = localScale;
+
+            _shooting.Restart();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -78,13 +85,9 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void InitModules()
         {
-            var serviceStorage = _gameData.CoreData.ServiceStorage;
-
-            _updaterService = serviceStorage.GetService<Core.Services.IUpdaterService>();
-
-            var inputService = serviceStorage.GetService<Core.Services.IInputService>();
+            var inputService = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IInputService>();
             var playerConfig = _gameData.ConfigStorage.GetConfig<Configs.IPlayerConfig>();
-            
+
             _input = new PlayerInput(inputService);
 
             var movementArgs = new PlayerMovementArgs(_input, transform, playerConfig);
@@ -107,32 +110,17 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void Subscribe()
         {
-            _updaterService.AddUpdatable(this);
-            _updaterService.AddFixedUpdatable(this);
-            _updaterService.AddLateUpdatable(this);
-            _updaterService.AddPausable(this);
-
             _health.Dead += OnDead;
         }
 
         private void Unsubscribe()
         {
-            if (_updaterService != null)
-            {
-                _updaterService.RemoveUpdatable(this);
-                _updaterService.RemoveFixedUpdatable(this);
-                _updaterService.RemoveLateUpdatable(this);
-                _updaterService.RemovePausable(this);
-            }
-
             _health.Dead -= OnDead;
         }
 
         private void OnDead()
         {
-#if UNITY_EDITOR
-            UnityEngine.Debug.Log($"Dead");
-#endif
+            Dead?.Invoke();
         }
     }
 }

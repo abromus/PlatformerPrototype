@@ -37,11 +37,11 @@
         {
             var stateMachine = new Core.Services.StateMachine();
 
-            stateMachine.Add(new GameInitializationState(_gameData, stateMachine));//создать игрока/мир
-            stateMachine.Add(new GameStartState(stateMachine));//создать ui
-            stateMachine.Add(new GameRestartState(stateMachine));//пересоздать врагов/обновить окружение
-            stateMachine.Add(new GameLoopState(stateMachine));//игровая сессия
-            stateMachine.Add(new GameOverState(stateMachine));//вывести экран
+            stateMachine.Add(new GameInitializationState(_gameData, stateMachine));
+            stateMachine.Add(new GameStartState(stateMachine));
+            stateMachine.Add(new GameRestartState(stateMachine));
+            stateMachine.Add(new GameLoopState(stateMachine));
+            stateMachine.Add(new GameOverState(stateMachine));
 
             return stateMachine;
         }
