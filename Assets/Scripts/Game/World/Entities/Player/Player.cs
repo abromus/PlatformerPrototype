@@ -2,7 +2,6 @@ namespace PlatformerPrototype.Game.World.Entities
 {
     internal sealed class Player : UnityEngine.MonoBehaviour, IPlayer
     {
-        [UnityEngine.SerializeField] private Projectiles.Projectile _projectilePrefab;
         [UnityEngine.SerializeField] private UnityEngine.Animator _animator;
 
         private Data.IGameData _gameData;
@@ -98,7 +97,6 @@ namespace PlatformerPrototype.Game.World.Entities
                 _input,
                 transform,
                 projectileFactory,
-                _projectilePrefab,
                 _projectileContainer,
                 playerConfig);
             _shooting = new PlayerShooting(in shootingArgs);

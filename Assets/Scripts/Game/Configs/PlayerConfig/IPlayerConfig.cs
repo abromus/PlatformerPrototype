@@ -6,10 +6,6 @@
 
         public float Hp { get; }
 
-        public float SingleShootingDelay { get; }
-
-        public float ContinuousShootingDelay { get; }
-
-        public UnityEngine.Vector3 ProjectileOffset { get; }
+        public IPlayerWeaponConfig WeaponConfig { get; }
     }
 }

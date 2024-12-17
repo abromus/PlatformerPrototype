@@ -217,7 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2423b5daacb094d8b723343036e38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 2504338875537089345, guid: 3570f5725baaa5243aec20c28b79aee1, type: 3}
   _animator: {fileID: -592717189007476368}
 --- !u!50 &6939086419478701987
 Rigidbody2D:

@@ -7,19 +7,12 @@
         [UnityEngine.Space]
         [UnityEngine.SerializeField] private float _hp;
         [UnityEngine.Space]
-        //Если появятся виды оружия, то вынести в отдельный конфиг
-        [UnityEngine.SerializeField] private float _singleShootingDelay = .5f;
-        [UnityEngine.SerializeField] private float _continuousShootingDelay = 0.25f;
-        [UnityEngine.SerializeField] private UnityEngine.Vector3 _projectileOffset;
+        [UnityEngine.SerializeField] private PlayerWeaponConfig _weaponConfig;
 
         public float MovementXSensitivity => _movementXSensitivity;
 
         public float Hp => _hp;
 
-        public float SingleShootingDelay => _singleShootingDelay;
-
-        public float ContinuousShootingDelay => _continuousShootingDelay;
-
-        public UnityEngine.Vector3 ProjectileOffset => _projectileOffset;
+        public IPlayerWeaponConfig WeaponConfig => _weaponConfig;
     }
 }
