@@ -15,6 +15,8 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public int CurrentAmmo => _currentAmmo;
 
+        public event System.Action AmmoChanged;
+
         internal PlayerWeaponStorage(in WeaponInfo[] weaponInfos)
         {
             _weaponInfos = weaponInfos;
@@ -58,12 +60,16 @@ namespace PlatformerPrototype.Game.World.Entities
 
             index = _currentIndex;
 
+            AmmoChanged?.Invoke();
+
             return true;
         }
 
         public void AddAmmo(int count)
         {
             _currentAmmo += count;
+
+            AmmoChanged?.Invoke();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -71,6 +77,8 @@ namespace PlatformerPrototype.Game.World.Entities
         {
             _currentIndex = UnityEngine.Random.Range(0, _weaponInfos.Length);
             _currentAmmo = _weaponInfos[_currentIndex].Capacity;
+
+            AmmoChanged?.Invoke();
         }
 
         private void CheckShootingDelay(float deltaTime)

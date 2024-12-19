@@ -15,12 +15,31 @@ namespace PlatformerPrototype.Game.Data
 
         public Core.Factories.IFactoryStorage FactoryStorage => _factoryStorage;
 
-        internal GameData(Core.Data.ICoreData coreData, Core.Configs.IConfigStorage configStorage)
+        public event System.Action Restarted;
+
+        public event System.Action Exited;
+
+        internal GameData(
+            Core.Data.ICoreData coreData,
+            Core.Configs.IConfigStorage configStorage,
+            UnityEngine.Transform uiServiceContainer)
         {
             _coreData = coreData;
             _configStorage = configStorage;
-            _serviceStorage = new Services.ServiceStorage(this);
+            _serviceStorage = new Services.ServiceStorage(this, uiServiceContainer);
             _factoryStorage = new Factories.FactoryStorage(this, configStorage);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void Restart()
+        {
+            Restarted?.Invoke();
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void Exit()
+        {
+            Exited?.Invoke();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

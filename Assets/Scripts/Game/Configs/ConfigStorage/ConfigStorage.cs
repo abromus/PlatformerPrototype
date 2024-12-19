@@ -5,6 +5,8 @@
     {
         [UnityEngine.SerializeField] private EnemiesConfig _enemiesConfig;
         [UnityEngine.SerializeField] private PlayerConfig _playerConfig;
+        [UnityEngine.SerializeField] private ScreensConfig _screensConfig;
+        [UnityEngine.SerializeField] private UiServiceConfig _uiServiceConfig;
         [UnityEngine.SerializeField] private Core.Configs.UiFactoryConfig _uiFactoryConfig;
 
         private System.Collections.Generic.Dictionary<System.Type, Core.Configs.IConfig> _configs;
@@ -16,6 +18,8 @@
             {
                 [typeof(IEnemiesConfig)] = _enemiesConfig,
                 [typeof(IPlayerConfig)] = _playerConfig,
+                [typeof(IScreensConfig)] = _screensConfig,
+                [typeof(IUiServiceConfig)] = _uiServiceConfig,
                 [typeof(Core.Configs.IUiFactoryConfig)] = _uiFactoryConfig,
             };
         }

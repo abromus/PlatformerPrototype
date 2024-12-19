@@ -7,6 +7,7 @@
         private ShootingMode _shootingMode;
         private bool _isPaused;
 
+        private readonly Services.IEventSystemService _eventSystemService;
         private readonly Core.Services.IInputService _inputService;
 
         public float MoveXDirection => _moveXDirection;
@@ -15,8 +16,9 @@
 
         public ShootingMode ShootingMode => _shootingMode;
 
-        internal PlayerInput(Core.Services.IInputService inputService)
+        internal PlayerInput(Services.IEventSystemService eventSystemService, Core.Services.IInputService inputService)
         {
+            _eventSystemService = eventSystemService;
             _inputService = inputService;
         }
 
@@ -42,14 +44,7 @@
                     ? ShootingMode.Continuous
                     : ShootingMode.None;
 
-            _isShooting = _shootingMode != ShootingMode.None;
+            _isShooting = _shootingMode != ShootingMode.None && _eventSystemService.IsPointerOverGameObject() == false;
         }
-    }
-
-    internal enum ShootingMode
-    {
-        None = 0,
-        Single = 1,
-        Continuous = 2,
     }
 }

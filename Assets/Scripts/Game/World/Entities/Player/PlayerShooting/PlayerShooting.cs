@@ -15,6 +15,10 @@
         private readonly Core.IObjectPool<Projectiles.IProjectile> _pool;
         private readonly System.Collections.Generic.List<Projectiles.IProjectile> _projectiles = new(64);
 
+        public int CurrentAmmo => _weaponStorage.CurrentAmmo;
+
+        public event System.Action AmmoChanged;
+
         public event System.Action AmmoOut;
 
         internal PlayerShooting(in PlayerShootingArgs args)
@@ -28,6 +32,8 @@
             _weaponStorage = new PlayerWeaponStorage(in _weaponInfos);
 
             _pool = new Core.ObjectPool<Projectiles.IProjectile>(CreateProjectile);
+
+            Subscribe();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -78,6 +84,8 @@
 
         public void Destroy()
         {
+            Unsubscribe();
+
             for (int i = 0; i < _projectiles.Count; i++)
                 _pool.Release(_projectiles[i]);
 
@@ -112,6 +120,24 @@
             projectile.InitPosition(position, direction);
             projectile.Activate();
             projectile.Destroyed += OnProjectileDestroyed;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void Subscribe()
+        {
+            _weaponStorage.AmmoChanged += OnAmmoChanged;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void Unsubscribe()
+        {
+            if (_weaponStorage != null)
+                _weaponStorage.AmmoChanged -= OnAmmoChanged;
+        }
+
+        private void OnAmmoChanged()
+        {
+            AmmoChanged?.Invoke();
         }
 
         private void OnProjectileDestroyed(Projectiles.IProjectile projectile)

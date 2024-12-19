@@ -6,7 +6,7 @@
         [UnityEngine.SerializeField] private UnityEngine.Transform _uiServiceContainer;
 
         private Data.ICoreData _coreData;
-        private Services.IUpdaterService _updater;
+        private Services.IUpdaterService _updaterService;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal void Init()
@@ -19,34 +19,34 @@
         {
             _coreData = new Data.CoreData(this, _configStorage, _uiServiceContainer);
 
-            _updater = _coreData.ServiceStorage.GetService<Services.IUpdaterService>();
+            _updaterService = _coreData.ServiceStorage.GetService<Services.IUpdaterService>();
 
             EnterInitState();
         }
 
         private void Update()
         {
-            _updater.Tick(UnityEngine.Time.deltaTime);
+            _updaterService.Tick(UnityEngine.Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
-            _updater.FixedTick(UnityEngine.Time.deltaTime);
+            _updaterService.FixedTick(UnityEngine.Time.deltaTime);
         }
 
         private void LateUpdate()
         {
-            _updater.LateTick(UnityEngine.Time.deltaTime);
+            _updaterService.LateTick(UnityEngine.Time.deltaTime);
         }
 
         private void OnApplicationFocus(bool focus)
         {
-            _updater.SetPause(focus == false);
+            _updaterService.SetPause(focus == false);
         }
 
         private void OnApplicationPause(bool pause)
         {
-            _updater.SetPause(pause);
+            _updaterService.SetPause(pause);
         }
 
         private void OnDestroy()

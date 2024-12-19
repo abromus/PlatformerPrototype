@@ -1,18 +1,27 @@
-﻿namespace PlatformerPrototype.Game.Services
+﻿using PlatformerPrototype.Core;
+
+namespace PlatformerPrototype.Game.Services
 {
     internal sealed class ServiceStorage : Core.Services.IServiceStorage
     {
         private readonly Data.IGameData _gameData;
         private readonly System.Collections.Generic.Dictionary<System.Type, Core.Services.IService> _services;
 
-        internal ServiceStorage(Data.GameData gameData)
+        internal ServiceStorage(Data.GameData gameData, UnityEngine.Transform uiServiceContainer)
         {
             _gameData = gameData;
 
-            var stateMachine = InitStateMachine();
+            uiServiceContainer.SetParent(null);
+
+            var uiServices = _gameData.ConfigStorage.GetConfig<Configs.IUiServiceConfig>().UiServices;
+            var eventSystemService = InitEventSystemService(uiServices, uiServiceContainer);
+            var screenSystemService = InitScreenSystemService(uiServices, uiServiceContainer);
+            var stateMachine = InitStateMachine(screenSystemService);
 
             _services = new(8)
             {
+                [typeof(IEventSystemService)] = eventSystemService,
+                [typeof(IScreenSystemService)] = screenSystemService,
                 [typeof(Core.Services.IStateMachine)] = stateMachine,
             };
         }
@@ -33,17 +42,56 @@
             _services.Clear();
         }
 
-        private Core.Services.IStateMachine InitStateMachine()
+        private IEventSystemService InitEventSystemService(Core.Services.IUiService[] uiServices, UnityEngine.Transform uiServiceContainer)
+        {
+            var eventSystemServicePrefab = GetService<IEventSystemService>(uiServices);
+            var eventSystemService = InstantiateUiService(eventSystemServicePrefab as Core.Services.BaseUiService, uiServiceContainer) as IEventSystemService;
+
+            return eventSystemService;
+        }
+
+        private IScreenSystemService InitScreenSystemService(Core.Services.IUiService[] uiServices, UnityEngine.Transform uiServiceContainer)
+        {
+            var screenSystemServicePrefab = GetService<IScreenSystemService>(uiServices);
+            var screenSystemService = InstantiateUiService(screenSystemServicePrefab as Core.Services.BaseUiService, uiServiceContainer) as IScreenSystemService;
+            screenSystemService.Init(_gameData);
+            screenSystemService.AttachTo(uiServiceContainer);
+
+            return screenSystemService;
+        }
+
+        private Core.Services.IStateMachine InitStateMachine(IScreenSystemService screenSystemService)
         {
             var stateMachine = new Core.Services.StateMachine();
 
             stateMachine.Add(new GameInitializationState(_gameData, stateMachine));
             stateMachine.Add(new GameStartState(stateMachine));
             stateMachine.Add(new GameRestartState(stateMachine));
-            stateMachine.Add(new GameLoopState(stateMachine));
-            stateMachine.Add(new GameOverState(stateMachine));
+            stateMachine.Add(new GameLoopState());
+            stateMachine.Add(new GameOverState(screenSystemService));
 
             return stateMachine;
+        }
+
+        private TService GetService<TService>(Core.Services.IUiService[] uiServices) where TService : class, Core.Services.IService
+        {
+            for (int i = 0; i < uiServices.Length; i++)
+            {
+                var uiService = uiServices[i];
+
+                if (uiService is TService service)
+                    return service;
+            }
+
+            return null;
+        }
+
+        private Core.Services.BaseUiService InstantiateUiService(Core.Services.BaseUiService uiServicePrefab, UnityEngine.Transform uiServiceContainer)
+        {
+            var uiService = UnityEngine.Object.Instantiate(uiServicePrefab, uiServiceContainer);
+            uiService.gameObject.RemoveCloneSuffix();
+
+            return uiService;
         }
     }
 }

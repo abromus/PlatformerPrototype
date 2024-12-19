@@ -9,14 +9,13 @@
             _stateMachine = stateMachine;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Enter(GameStateArgs args)
         {
             _stateMachine.Enter<GameRestartState, GameStateArgs>(args);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public void Exit()
-        {
-        }
+        public void Exit() { }
     }
 }

@@ -54,10 +54,17 @@
             FixedTickEnemies(deltaTime);
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void SetPause(bool isPaused)
         {
             _isPaused = isPaused;
+
+            foreach (var pair in _enemies)
+            {
+                var enemies = pair.Value;
+
+                for (int i = 0; i < enemies.Count; i++)
+                    enemies[i].SetPause(isPaused);
+            }
         }
 
         public void Restart()
@@ -88,7 +95,6 @@
             }
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Destroy()
         {
             foreach (var pair in _enemies)

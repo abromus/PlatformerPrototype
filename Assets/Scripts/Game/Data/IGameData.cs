@@ -9,5 +9,13 @@ namespace PlatformerPrototype.Game.Data
         public Core.Services.IServiceStorage ServiceStorage { get; }
 
         public Core.Factories.IFactoryStorage FactoryStorage { get; }
+
+        public event System.Action Restarted;
+
+        public event System.Action Exited;
+
+        public void Restart();
+
+        public void Exit();
     }
 }

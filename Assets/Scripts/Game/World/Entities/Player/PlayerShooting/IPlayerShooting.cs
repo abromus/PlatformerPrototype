@@ -2,6 +2,10 @@
 {
     internal interface IPlayerShooting : Core.IDestroyable, IRestartable
     {
+        public int CurrentAmmo { get; }
+
+        public event System.Action AmmoChanged;
+
         public event System.Action AmmoOut;
 
         public void Tick(float deltaTime);

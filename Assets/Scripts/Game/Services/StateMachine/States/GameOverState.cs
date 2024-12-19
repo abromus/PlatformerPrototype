@@ -2,17 +2,19 @@
 {
     internal sealed class GameOverState : Core.Services.IEnterState<GameStateArgs>
     {
-        private readonly Core.Services.IStateMachine _stateMachine;
+        private readonly IScreenSystemService _screenSystemService;
 
-        internal GameOverState(Core.Services.IStateMachine stateMachine)
+        internal GameOverState(IScreenSystemService screenSystemService)
         {
-            _stateMachine = stateMachine;
+            _screenSystemService = screenSystemService;
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Enter(GameStateArgs args)
         {
-            _stateMachine.Enter<GameRestartState, GameStateArgs>(args);
+            _screenSystemService.HideScreens();
+
+            _screenSystemService.Show(Configs.ScreenType.GameOver);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

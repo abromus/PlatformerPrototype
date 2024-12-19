@@ -4,6 +4,8 @@
     {
         public int CurrentAmmo { get; }
 
+        public event System.Action AmmoChanged;
+
         public void Tick(float deltaTime);
 
         public void SetPause(bool isPaused);

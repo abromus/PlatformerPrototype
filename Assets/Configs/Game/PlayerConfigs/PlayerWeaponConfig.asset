@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: PlayerWeaponConfig
   m_EditorClassIdentifier: 
   _weaponInfos:
-  - _singleShootingDelay: 0.5
+  - _singleShootingDelay: 0.75
     _continuousShootingDelay: 0.25
     _projectileOffset: {x: 0.825, y: 0, z: 0}
     _capacity: 100
+    _projectilePrefab: {fileID: 2504338875537089345, guid: 3570f5725baaa5243aec20c28b79aee1, type: 3}
+  - _singleShootingDelay: 1.75
+    _continuousShootingDelay: 0.15
+    _projectileOffset: {x: 0.825, y: 0, z: 0}
+    _capacity: 35
     _projectilePrefab: {fileID: 2504338875537089345, guid: 3570f5725baaa5243aec20c28b79aee1, type: 3}

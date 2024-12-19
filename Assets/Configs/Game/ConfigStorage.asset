@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemiesConfig: {fileID: 11400000, guid: fbfe37959a4448447aef87ba571a5f42, type: 2}
   _playerConfig: {fileID: 11400000, guid: a50cb7cd79abea649a33d7d2f565729d, type: 2}
+  _screensConfig: {fileID: 11400000, guid: 8b04c787372472549bc0e3e5f2360362, type: 2}
+  _uiServiceConfig: {fileID: 11400000, guid: 2f362c91290f89642987af788035bd26, type: 2}
   _uiFactoryConfig: {fileID: 11400000, guid: 303157dd91ef0264d974b22d981ccfd2, type: 2}

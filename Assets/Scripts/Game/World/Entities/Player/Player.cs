@@ -15,6 +15,10 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public UnityEngine.Transform Transform => transform;
 
+        public int CurrentAmmo => _shooting.CurrentAmmo;
+
+        public event System.Action AmmoChanged;
+
         public event System.Action Dead;
 
         public void Init(Data.IGameData gameData, UnityEngine.Transform projectileContainer)
@@ -43,6 +47,7 @@ namespace PlatformerPrototype.Game.World.Entities
         {
             _input.SetPause(isPaused);
             _movement.SetPause(isPaused);
+            _shooting.SetPause(isPaused);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -62,7 +67,6 @@ namespace PlatformerPrototype.Game.World.Entities
             _shooting.Restart();
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Destroy()
         {
             Unsubscribe();
@@ -91,10 +95,11 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void InitModules()
         {
+            var eventSystemService = _gameData.ServiceStorage.GetService<Services.IEventSystemService>();
             var inputService = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IInputService>();
             var playerConfig = _gameData.ConfigStorage.GetConfig<Configs.IPlayerConfig>();
 
-            _input = new PlayerInput(inputService);
+            _input = new PlayerInput(eventSystemService, inputService);
 
             var movementArgs = new PlayerMovementArgs(_input, transform, playerConfig);
             _movement = new PlayerMovement(in movementArgs);
@@ -118,18 +123,25 @@ namespace PlatformerPrototype.Game.World.Entities
         private void Subscribe()
         {
             _health.Dead += OnDead;
+            _shooting.AmmoChanged += OnAmmoChanged;
             _shooting.AmmoOut += OnAmmoOut;
         }
 
         private void Unsubscribe()
         {
             _health.Dead -= OnDead;
+            _shooting.AmmoChanged -= OnAmmoChanged;
             _shooting.AmmoOut -= OnAmmoOut;
         }
 
         private void OnDead()
         {
             Dead?.Invoke();
+        }
+
+        private void OnAmmoChanged()
+        {
+            AmmoChanged?.Invoke();
         }
 
         private void OnAmmoOut()

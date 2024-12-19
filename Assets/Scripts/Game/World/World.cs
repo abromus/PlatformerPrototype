@@ -9,10 +9,12 @@
         private Data.IGameData _gameData;
         private Core.Services.IStateMachine _stateMachine;
         private Core.Services.ICameraService _cameraService;
+        private Services.IScreenSystemService _screenSystemService;
         private Core.Services.IUpdaterService _updaterService;
         private Entities.IPlayer _player;
         private Entities.IEnemiesSpawner _enemiesSpawner;
         private DropStorages.IDropStorage _dropStorage;
+        private Services.IScreenArgs _mainScreenArgs;
 
         public void Init(Data.IGameData gameData, Core.Services.IStateMachine stateMachine)
         {
@@ -22,6 +24,7 @@
             var serviceStorage = _gameData.CoreData.ServiceStorage;
             _cameraService = serviceStorage.GetService<Core.Services.ICameraService>();
             _updaterService = serviceStorage.GetService<Core.Services.IUpdaterService>();
+            _screenSystemService = _gameData.ServiceStorage.GetService<Services.IScreenSystemService>();
 
             var factoryStorage = _gameData.FactoryStorage;
 
@@ -30,6 +33,10 @@
             InitDropStorage(factoryStorage);
 
             _cameraService.AttachTo(_player.Transform);
+
+            _mainScreenArgs = new Services.MainScreenArgs(_player);
+
+            Subscribe();
         }
 
         public void Tick(float deltaTime)
@@ -56,7 +63,8 @@
             _enemiesSpawner.Restart();
             _dropStorage.Restart();
 
-            Subscribe();
+            ShowMainScreen();
+            SubscribeOnUpdaterService();
         }
 
         public void Destroy()
@@ -102,11 +110,15 @@
             _stateMachine.Enter<Services.GameOverState, Services.GameStateArgs>(args);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void ShowMainScreen()
+        {
+            _screenSystemService.Show(Configs.ScreenType.Main, in _mainScreenArgs);
+        }
+
         private void Subscribe()
         {
-            _updaterService.AddUpdatable(this);
-            _updaterService.AddFixedUpdatable(this);
-            _updaterService.AddPausable(this);
+            _gameData.Restarted += OnRestarted;
 
             _player.Dead += OnPlayerDead;
             _enemiesSpawner.Dropped += OnDropped;
@@ -114,12 +126,8 @@
 
         private void Unsubscribe()
         {
-            if (_updaterService != null)
-            {
-                _updaterService.RemoveUpdatable(this);
-                _updaterService.RemoveFixedUpdatable(this);
-                _updaterService.RemovePausable(this);
-            }
+            if (_gameData != null)
+                _gameData.Restarted -= OnRestarted;
 
             if (_player != null)
                 _player.Dead -= OnPlayerDead;
@@ -128,9 +136,33 @@
                 _enemiesSpawner.Dropped -= OnDropped;
         }
 
+        private void SubscribeOnUpdaterService()
+        {
+            _updaterService.AddUpdatable(this);
+            _updaterService.AddFixedUpdatable(this);
+            _updaterService.AddPausable(this);
+        }
+
+        private void UnubscribeOnUpdaterService()
+        {
+            if (_updaterService != null)
+            {
+                _updaterService.RemoveUpdatable(this);
+                _updaterService.RemoveFixedUpdatable(this);
+                _updaterService.RemovePausable(this);
+            }
+        }
+
+        private void OnRestarted()
+        {
+            var args = new Services.GameStateArgs(this);
+
+            _stateMachine.Enter<Services.GameRestartState, Services.GameStateArgs>(args);
+        }
+
         private void OnPlayerDead()
         {
-            Unsubscribe();
+            UnubscribeOnUpdaterService();
 
             GameOver();
         }

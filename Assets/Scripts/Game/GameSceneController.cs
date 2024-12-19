@@ -3,6 +3,7 @@
     internal sealed class GameSceneController : Core.BaseSceneController
     {
         [UnityEngine.SerializeField] private Configs.ConfigStorage _configStorage;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _uiServiceContainer;
 
         private IGame _game;
 
@@ -10,19 +11,44 @@
         {
             _configStorage.Init();
 
-            _game = new Game(coreData, _configStorage);
+            _game = new Game(coreData, _configStorage, _uiServiceContainer);
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Run()
         {
+            Subscribe();
+
             _game.Run();
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Destroy()
         {
+            Unsubscribe();
+
             _game.Destroy();
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void Subscribe()
+        {
+            _game.Exited += OnExited;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void Unsubscribe()
+        {
+            _game.Exited -= OnExited;
+        }
+
+        private void OnExited()
+        {
+            Destroy();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            UnityEngine.Application.Quit();
+#endif
         }
     }
 }
