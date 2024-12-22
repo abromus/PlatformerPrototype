@@ -49,9 +49,16 @@
             CheckSpawnDelay(deltaTime);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void FixedTick(float deltaTime)
         {
             FixedTickEnemies(deltaTime);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void LateTick(float deltaTime)
+        {
+            LateTickEnemies(deltaTime);
         }
 
         public void SetPause(bool isPaused)
@@ -71,6 +78,12 @@
         {
             _canSpawn = true;
             _spawnDelay = 0f;
+
+            var enemies = _enemies.Values;
+
+            foreach (var currentEnemies in enemies)
+                for (int i = 0; i < currentEnemies.Count; i++)
+                    currentEnemies[i].Deactivate();
         }
 
         public void Stop()
@@ -196,6 +209,15 @@
             foreach (var currentEnemies in enemies)
                 for (int i = 0; i < currentEnemies.Count; i++)
                     currentEnemies[i].FixedTick(deltaTime);
+        }
+
+        private void LateTickEnemies(float deltaTime)
+        {
+            var enemies = _enemies.Values;
+
+            foreach (var currentEnemies in enemies)
+                for (int i = 0; i < currentEnemies.Count; i++)
+                    currentEnemies[i].LateTick(deltaTime);
         }
 
         private void OnEnemyDead(IEnemy enemy)

@@ -4,6 +4,8 @@
     {
         public void Activate();
 
+        public void Deactivate();
+
         public void Clear();
     }
 }

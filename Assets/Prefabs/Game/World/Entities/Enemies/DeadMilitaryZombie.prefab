@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1985720520852972447
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -592717189007476368, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9374b2ecd2815f646bb3f239cb8e53e9, type: 2}
+    - target: {fileID: 111817548640095572, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -418804204, guid: 211f8292d4ef5684fa8d4eeeefa0db35, type: 3}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8166302134708020536, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_Name
+      value: DeadMilitaryZombie
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}

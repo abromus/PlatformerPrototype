@@ -35,6 +35,7 @@
             _animatorView.enabled = isPaused == false;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Stop()
         {
             _animatorView.SetBool(Keys.IsMoving, false);

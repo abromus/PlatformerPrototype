@@ -51,10 +51,10 @@
             _enemiesSpawner.FixedTick(deltaTime);
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void LateTick(float deltaTime)
         {
             _player.LateTick(deltaTime);
+            _enemiesSpawner.LateTick(deltaTime);
         }
 
         public void SetPause(bool isPaused)

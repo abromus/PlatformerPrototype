@@ -18,6 +18,6 @@
 
         public void InitPosition(UnityEngine.Vector3 position);
 
-        public abstract void SetIndex(int index);
+        public void SetIndex(int index);
     }
 }

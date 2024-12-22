@@ -14,8 +14,6 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public void Tick(float deltaTime);
 
-        public void LateTick(float deltaTime);
-
         public void SetParent(UnityEngine.Transform parent);
     }
 }

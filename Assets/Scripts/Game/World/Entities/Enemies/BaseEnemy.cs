@@ -2,8 +2,6 @@
 {
     internal abstract class BaseEnemy : UnityEngine.MonoBehaviour, IEnemy
     {
-        [UnityEngine.SerializeField] private UnityEngine.Animator _animator;
-
         public abstract int Index { get; }
 
         public abstract UnityEngine.Vector3 Position { get; }
@@ -24,7 +22,11 @@
 
         public abstract void Activate();
 
+        public abstract void Deactivate();
+
         public abstract void FixedTick(float deltaTime);
+
+        public abstract void LateTick(float deltaTime);
 
         public abstract void SetPause(bool isPaused);
 

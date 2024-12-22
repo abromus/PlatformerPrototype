@@ -1,11 +1,7 @@
 namespace PlatformerPrototype.Game.World.Entities
 {
-    internal interface IPlayerAnimator
+    internal interface IPlayerAnimator : IAnimator
     {
-        public void LateTick(float deltaTime);
-
-        public void SetPause(bool isPaused);
-
         public void Stop();
     }
 }

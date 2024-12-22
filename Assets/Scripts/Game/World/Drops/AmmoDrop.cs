@@ -37,6 +37,12 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public override void Deactivate()
+        {
+            gameObject.SetActive(false);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Apply()
         {
             Destroyed?.Invoke(this);

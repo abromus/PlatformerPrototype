@@ -4,6 +4,8 @@
     {
         public void FixedTick(float deltaTime);
 
+        public void LateTick(float deltaTime);
+
         public void SetPause(bool isPaused);
     }
 }

@@ -1,24 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &1135152197517063864
+--- !u!1001 &8280861960427007181
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -592717189007476368, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: d2ffc2e4ec50cce4bb98eca2b0b9d03d, type: 2}
     - target: {fileID: 111817548640095572, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
-      propertyPath: m_Color.b
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 111817548640095572, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
-      propertyPath: m_Color.g
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 111817548640095572, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
-      propertyPath: m_Color.r
-      value: 0.09019608
-      objectReference: {fileID: 0}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1574946213, guid: 211f8292d4ef5684fa8d4eeeefa0db35, type: 3}
     - target: {fileID: 1890062982289190578, guid: 2a008e53f9daf2e4ead276d6b4fe5773, type: 3}
       propertyPath: m_RootOrder
       value: 0

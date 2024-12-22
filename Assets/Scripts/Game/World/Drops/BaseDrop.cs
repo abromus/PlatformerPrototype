@@ -16,6 +16,8 @@
 
         public abstract void Activate();
 
+        public abstract void Deactivate();
+
         public abstract void Clear();
 
         public abstract void Destroy();

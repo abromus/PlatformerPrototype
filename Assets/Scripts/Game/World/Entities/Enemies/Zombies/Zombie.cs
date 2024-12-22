@@ -2,8 +2,10 @@
 {
     internal sealed class Zombie : BaseEnemy
     {
+        [UnityEngine.SerializeField] private UnityEngine.Transform _view;
         [UnityEngine.SerializeField] private Health.HealthView _healthView;
         [UnityEngine.SerializeField] private UnityEngine.Rigidbody2D _rigidbody;
+        [UnityEngine.SerializeField] private UnityEngine.Animator _animatorView;
         [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
 
         private int _index;
@@ -13,6 +15,7 @@
 
         private IZombieMovement _movement;
         private IZombieHealth _health;
+        private IZombieAnimator _animator;
 
         public override int Index => _index;
 
@@ -34,11 +37,13 @@
             InitModules(in args);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void InitPosition(UnityEngine.Vector3 position)
         {
             transform.position = position;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void InitHp()
         {
             _health.InitHp();
@@ -55,6 +60,17 @@
             Subscribe();
         }
 
+        public override void Deactivate()
+        {
+            _isDead = true;
+            _rigidbody.simulated = false;
+            _health.SetActive(false);
+
+            gameObject.SetActive(false);
+
+            Unsubscribe();
+        }    
+
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void FixedTick(float deltaTime)
         {
@@ -62,9 +78,15 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public override void LateTick(float deltaTime)
+        {
+            _animator.LateTick(deltaTime);
+        }
+
         public override void SetPause(bool isPaused)
         {
             _movement.SetPause(isPaused);
+            _animator.SetPause(isPaused);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -110,6 +132,9 @@
 
             var healthArgs = new ZombieHealthArgs(_healthView, args.Hp);
             _health = new ZombieHealth(in healthArgs);
+
+            var animatorArgs = new ZombieAnimatorArgs(_view, _movement, _animatorView);
+            _animator = new ZombieAnimator(in animatorArgs);
         }
 
         private void Subscribe()

@@ -8,6 +8,8 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public void FixedTick(float deltaTime);
 
+        public void LateTick(float deltaTime);
+
         public void SetPause(bool isPaused);
 
         public void Stop();

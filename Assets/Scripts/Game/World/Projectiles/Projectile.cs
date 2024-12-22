@@ -39,6 +39,16 @@
             Subscribe();
         }
 
+        public override void Deactivate()
+        {
+            _isDestroyed = true;
+            _movingTime = 0f;
+
+            gameObject.SetActive(false);
+
+            Unsubscribe();
+        }
+
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Tick(float deltaTime)
         {
