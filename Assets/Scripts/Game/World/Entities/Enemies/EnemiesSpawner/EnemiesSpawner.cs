@@ -82,7 +82,7 @@
 
             foreach (var currentEnemies in enemies)
                 for (int i = 0; i < currentEnemies.Count; i++)
-                    currentEnemies[i].Deactivate();
+                    currentEnemies[i].Clear();
         }
 
         public void Stop()
@@ -100,9 +100,10 @@
                 {
                     var enemy = enemies[i];
                     enemy.Dead -= OnEnemyDead;
-                    enemy.Clear();
+                    enemy.Deactivate();
                     enemies.Remove(enemy);
                     pool.Release(enemy);
+                    --i;
                 }
             }
         }
@@ -121,6 +122,7 @@
                     enemy.Dead -= OnEnemyDead;
                     enemy.Clear();
                     pool.Release(enemies[i]);
+                    --i;
                 }
 
                 enemies.Clear();

@@ -92,7 +92,7 @@
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Clear()
         {
-            Destroy();
+            Deactivate();
 
             //отключить звук
         }

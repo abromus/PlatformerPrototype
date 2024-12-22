@@ -147,6 +147,7 @@
 
         private void GameOver()
         {
+            _player.Stop();
             _enemiesSpawner.Stop();
 
             var args = new Services.GameStateArgs(this);
@@ -217,13 +218,5 @@
         {
             _dropStorage.Drop(dropConfig, position);
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            UnityEngine.Gizmos.color = UnityEngine.Color.red;
-            UnityEngine.Gizmos.DrawWireCube(UnityEngine.Vector3.zero, _backgroundPrefab.Size);
-        }
-#endif
     }
 }

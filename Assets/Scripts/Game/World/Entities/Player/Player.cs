@@ -66,6 +66,12 @@ namespace PlatformerPrototype.Game.World.Entities
             transform.SetParent(parent);
         }
 
+        public void Stop()
+        {
+            _animator.Stop();
+            _shooting.StopAnimation();
+        }
+
         public void Restart()
         {
             transform.position = UnityEngine.Vector3.zero;
@@ -158,9 +164,6 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void OnAmmoOut()
         {
-            _animator.Stop();
-            _shooting.StopAnimation();
-
             Dead?.Invoke();
         }
     }
