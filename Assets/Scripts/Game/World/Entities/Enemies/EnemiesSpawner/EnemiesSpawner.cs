@@ -2,8 +2,6 @@
 {
     internal sealed class EnemiesSpawner : IEnemiesSpawner
     {
-        private UnityEngine.Rect _screenRect;
-
         private bool _canSpawn;
         private bool _isPaused;
         private float _spawnDelay;
@@ -13,6 +11,7 @@
         private readonly Configs.IEnemiesConfig _config;
         private readonly UnityEngine.Transform _player;
         private readonly UnityEngine.Transform _enemyContainer;
+        private readonly UnityEngine.Rect _screenRect;
 
         private readonly System.Collections.Generic.Dictionary<int, Core.IObjectPool<IEnemy>> _pools = new(16);
         private readonly System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<IEnemy>> _enemies = new(8);

@@ -7,7 +7,10 @@
         private UnityEngine.Transform _container;
         private UnityEngine.Camera _camera;
 
-        public UnityEngine.Camera Camera => _camera;
+        private readonly UnityEngine.Vector3[] _frustumCorners = new UnityEngine.Vector3[4];
+        private readonly UnityEngine.Rect _viewport = new(0, 0, 1, 1);
+
+        public UnityEngine.Transform CameraTransform => _camera.transform;
 
         public void Init(UnityEngine.Transform container)
         {
@@ -33,9 +36,17 @@
 
         public UnityEngine.Rect GetScreenRect()
         {
-            var bottomLeft = _camera.ScreenToWorldPoint(UnityEngine.Vector3.zero);
-            var topRight = _camera.ScreenToWorldPoint(new UnityEngine.Vector3(UnityEngine.Screen.width, UnityEngine.Screen.height, _camera.nearClipPlane));
-            var screenRect = new UnityEngine.Rect(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y);
+            _camera.CalculateFrustumCorners(
+                _viewport,
+                _camera.nearClipPlane - _camera.transform.position.z,
+                UnityEngine.Camera.MonoOrStereoscopicEye.Mono,
+                _frustumCorners);
+
+            var screenRect = new UnityEngine.Rect(
+                0f,
+                0f,
+                _frustumCorners[2].x - _frustumCorners[0].x,
+                _frustumCorners[2].y - _frustumCorners[0].y);
 
             return screenRect;
         }

@@ -2,6 +2,14 @@
 {
     internal sealed class World : UnityEngine.MonoBehaviour, IWorld
     {
+        [UnityEngine.SerializeField] private UnityEngine.Transform _backgroundCamera;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _backgroundsContainer;
+        [UnityEngine.SerializeField] private Background _backgroundPrefab;
+        [UnityEngine.SerializeField] private float _backgroundOffsetSpeed;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _chunksContainer;
+        [UnityEngine.SerializeField] private Chunk _chunkPrefab;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _earth;
+        [UnityEngine.Space]
         [UnityEngine.SerializeField] private UnityEngine.Transform _enemyContainer;
         [UnityEngine.SerializeField] private UnityEngine.Transform _dropContainer;
         [UnityEngine.SerializeField] private UnityEngine.Transform _projectileContainer;
@@ -11,8 +19,10 @@
         private Core.Services.ICameraService _cameraService;
         private Services.IScreenSystemService _screenSystemService;
         private Core.Services.IUpdaterService _updaterService;
+
         private Entities.IPlayer _player;
         private Entities.IEnemiesSpawner _enemiesSpawner;
+        private IEnvironmentStorage _environmentStorage;
         private DropStorages.IDropStorage _dropStorage;
         private Services.IScreenArgs _mainScreenArgs;
 
@@ -29,6 +39,8 @@
             var factoryStorage = _gameData.FactoryStorage;
 
             CreatePlayer(factoryStorage);
+            InitBackground();
+            InitEnvironmentStorage(factoryStorage);
             InitEnemiesSpawner(factoryStorage);
             InitDropStorage(factoryStorage);
 
@@ -55,6 +67,7 @@
         {
             _player.LateTick(deltaTime);
             _enemiesSpawner.LateTick(deltaTime);
+            _environmentStorage.LateTick(deltaTime);
         }
 
         public void SetPause(bool isPaused)
@@ -68,6 +81,7 @@
             _player.Restart();
             _enemiesSpawner.Restart();
             _dropStorage.Restart();
+            _environmentStorage.Restart();
 
             ShowMainScreen();
             SubscribeOnUpdaterService();
@@ -90,6 +104,31 @@
             _player.SetParent(transform);
         }
 
+        private void InitBackground()
+        {
+            _backgroundCamera.SetParent(_cameraService.CameraTransform);
+            _earth.SetParent(_player.Transform);
+
+            var position = _backgroundCamera.transform.localPosition;
+            position.y = 0f;
+            _backgroundCamera.transform.localPosition = position;
+        }
+
+        private void InitEnvironmentStorage(Core.Factories.IFactoryStorage factoryStorage)
+        {
+            var factory = factoryStorage.GetFactory<Factories.IEnvironmentFactory>();
+            var args = new EnvironmentStorageArgs(
+                factory,
+                _player.Transform,
+                _backgroundsContainer,
+                _backgroundPrefab,
+                _backgroundOffsetSpeed,
+                _chunksContainer,
+                _chunkPrefab);
+
+            _environmentStorage = new EnvironmentStorage(in args);
+        }
+
         private void InitEnemiesSpawner(Core.Factories.IFactoryStorage factoryStorage)
         {
             var factory = factoryStorage.GetFactory<Factories.IEnemyFactory>();
@@ -109,7 +148,6 @@
         private void GameOver()
         {
             _enemiesSpawner.Stop();
-            _dropStorage.Stop();
 
             var args = new Services.GameStateArgs(this);
 
@@ -179,5 +217,13 @@
         {
             _dropStorage.Drop(dropConfig, position);
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            UnityEngine.Gizmos.color = UnityEngine.Color.red;
+            UnityEngine.Gizmos.DrawWireCube(UnityEngine.Vector3.zero, _backgroundPrefab.Size);
+        }
+#endif
     }
 }

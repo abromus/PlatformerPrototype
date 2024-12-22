@@ -28,22 +28,7 @@
             drop.Destroyed += OnDropDestroyed;
         }
 
-        private World.Drops.IDrop CreateDrop()
-        {
-            var drop = _factory.Create(_currentDropConfig, _container);
-
-            _drops.Add(drop);
-
-            return drop;
-        }
-
         public void Restart()
-        {
-            for (int i = 0; i < _drops.Count; i++)
-                _pool.Release(_drops[i]);
-        }
-
-        public void Stop()
         {
             for (int i = 0; i < _drops.Count; i++)
             {
@@ -62,6 +47,15 @@
 
             _drops.Clear();
             _pool.Destroy();
+        }
+
+        private World.Drops.IDrop CreateDrop()
+        {
+            var drop = _factory.Create(_currentDropConfig, _container);
+
+            _drops.Add(drop);
+
+            return drop;
         }
 
         private void OnDropDestroyed(World.Drops.IDrop drop)

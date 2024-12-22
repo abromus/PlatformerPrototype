@@ -15,6 +15,7 @@
             var uiFactories = _configStorage.GetConfig<Core.Configs.IUiFactoryConfig>().UiFactories;
             var dropFactory = InitDropFactory(uiFactories);
             var enemyFactory = InitEnemyFactory(uiFactories);
+            var environmentFactory = InitEnvironmentFactory(uiFactories);
             var playerFactory = InitPlayerFactory(uiFactories);
             var projectileFactory = InitProjectileFactory(uiFactories, updater);
             var worldFactory = InitWorldFactory(uiFactories);
@@ -23,6 +24,7 @@
             {
                 [typeof(IDropFactory)] = dropFactory,
                 [typeof(IEnemyFactory)] = enemyFactory,
+                [typeof(IEnvironmentFactory)] = environmentFactory,
                 [typeof(IPlayerFactory)] = playerFactory,
                 [typeof(IProjectileFactory)] = projectileFactory,
                 [typeof(IWorldFactory)] = worldFactory,
@@ -47,6 +49,13 @@
             var enemyFactory = GetFactory<IEnemyFactory>(uiFactories);
 
             return enemyFactory;
+        }
+
+        private IEnvironmentFactory InitEnvironmentFactory(Core.Factories.IUiFactory[] uiFactories)
+        {
+            var environmentFactory = GetFactory<IEnvironmentFactory>(uiFactories);
+
+            return environmentFactory;
         }
 
         private IPlayerFactory InitPlayerFactory(Core.Factories.IUiFactory[] uiFactories)

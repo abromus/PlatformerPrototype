@@ -1,5 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.Services
 {
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 8)]
     internal readonly struct MainScreenArgs : IScreenArgs
     {
         private readonly World.Entities.IPlayer _player;
