@@ -51,6 +51,12 @@
             _enemiesSpawner.FixedTick(deltaTime);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void LateTick(float deltaTime)
+        {
+            _player.LateTick(deltaTime);
+        }
+
         public void SetPause(bool isPaused)
         {
             _player.SetPause(isPaused);
@@ -140,6 +146,7 @@
         {
             _updaterService.AddUpdatable(this);
             _updaterService.AddFixedUpdatable(this);
+            _updaterService.AddLateUpdatable(this);
             _updaterService.AddPausable(this);
         }
 
@@ -149,6 +156,7 @@
             {
                 _updaterService.RemoveUpdatable(this);
                 _updaterService.RemoveFixedUpdatable(this);
+                _updaterService.RemoveLateUpdatable(this);
                 _updaterService.RemovePausable(this);
             }
         }

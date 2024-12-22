@@ -2,7 +2,9 @@ namespace PlatformerPrototype.Game.World.Entities
 {
     internal sealed class Player : UnityEngine.MonoBehaviour, IPlayer
     {
-        [UnityEngine.SerializeField] private UnityEngine.Animator _animator;
+        [UnityEngine.SerializeField] private UnityEngine.Transform _weaponTransform;
+        [UnityEngine.SerializeField] private UnityEngine.Animator _animatorView;
+        [UnityEngine.SerializeField] private UnityEngine.Animator _shootingAnimatorView;
 
         private Data.IGameData _gameData;
         private UnityEngine.Transform _projectileContainer;
@@ -12,6 +14,7 @@ namespace PlatformerPrototype.Game.World.Entities
         private IPlayerShooting _shooting;
         private IPlayerHealth _health;
         private IPlayerDropConsumer _dropConsumer;
+        private IPlayerAnimator _animator;
 
         public UnityEngine.Transform Transform => transform;
 
@@ -43,11 +46,18 @@ namespace PlatformerPrototype.Game.World.Entities
             _shooting.FixedTick(deltaTime);
         }
 
+        public void LateTick(float deltaTime)
+        {
+            _animator.LateTick(deltaTime);
+            _shooting.LateTick(deltaTime);
+        }
+
         public void SetPause(bool isPaused)
         {
             _input.SetPause(isPaused);
             _movement.SetPause(isPaused);
             _shooting.SetPause(isPaused);
+            _animator.SetPause(isPaused);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -108,16 +118,18 @@ namespace PlatformerPrototype.Game.World.Entities
             var shootingArgs = new PlayerShootingArgs(
                 _input,
                 transform,
+                _weaponTransform,
                 projectileFactory,
                 _projectileContainer,
-                playerConfig);
+                playerConfig,
+                _shootingAnimatorView);
             _shooting = new PlayerShooting(in shootingArgs);
 
             _health = new PlayerHealth(playerConfig.Hp);
 
             _dropConsumer = new PlayerDropConsumer(_shooting);
 
-            //var animator = new PlayerAnimator(_animator);
+            _animator = new Animators.PlayerAnimator(transform, _movement, _animatorView);
         }
 
         private void Subscribe()
@@ -146,6 +158,9 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void OnAmmoOut()
         {
+            _animator.Stop();
+            _shooting.StopAnimation();
+
             Dead?.Invoke();
         }
     }

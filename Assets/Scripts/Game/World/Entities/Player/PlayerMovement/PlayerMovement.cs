@@ -2,18 +2,23 @@
 {
     internal sealed class PlayerMovement : IPlayerMovement
     {
-        private float _moveXDirection;
         private bool _isPaused;
+        private float _moveXDirection;
+        private UnityEngine.Vector3 _lastPosition;
 
         private readonly IPlayerInput _playerInput;
         private readonly UnityEngine.Transform _transform;
         private readonly float _movementXSensitivity;
+
+        public bool IsMoving => _lastPosition != _transform.position;
 
         internal PlayerMovement(in PlayerMovementArgs args)
         {
             _playerInput = args.PlayerInput;
             _transform = args.Transform;
             _movementXSensitivity = args.PlayerConfig.MovementXSensitivity;
+
+            _lastPosition = _transform.position;
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -45,7 +50,9 @@
             if (_isPaused)
                 return;
 
-            var position = _transform.position;
+            _lastPosition = _transform.position;
+
+            var position = _lastPosition;
             position.x += _moveXDirection * _movementXSensitivity * deltaTime;
 
             _transform.position = position;

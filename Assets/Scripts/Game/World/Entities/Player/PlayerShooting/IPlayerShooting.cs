@@ -12,8 +12,12 @@
 
         public void FixedTick(float deltaTime);
 
+        public void LateTick(float deltaTime);
+
         public void SetPause(bool isPaused);
 
         public void AddAmmo(int count);
+
+        public void StopAnimation();
     }
 }

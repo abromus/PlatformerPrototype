@@ -2,7 +2,6 @@
 {
     internal sealed class Projectile : BaseProjectile
     {
-        [UnityEngine.SerializeField] private UnityEngine.Vector2 _size;
         [UnityEngine.SerializeField] private float _damage;
         [UnityEngine.SerializeField] private float _speed;
         [UnityEngine.SerializeField] private float _existenceTime;
@@ -108,13 +107,5 @@
                 _updaterService.RemovePausable(this);
             }
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            UnityEngine.Gizmos.color = UnityEngine.Color.green;
-            UnityEngine.Gizmos.DrawWireCube(transform.position, _size);
-        }
-#endif
     }
 }

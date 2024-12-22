@@ -2,6 +2,8 @@
 {
     internal interface IPlayerMovement
     {
+        public bool IsMoving { get; }
+
         public void Tick(float deltaTime);
 
         public void FixedTick(float deltaTime);

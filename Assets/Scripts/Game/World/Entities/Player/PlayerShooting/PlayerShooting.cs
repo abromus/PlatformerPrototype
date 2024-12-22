@@ -3,15 +3,19 @@
     internal sealed class PlayerShooting : IPlayerShooting
     {
         private bool _isShooting;
+        private ShootingMode _shootingMode;
         private int _currentIndex;
 
         private readonly IPlayerInput _playerInput;
         private readonly UnityEngine.Transform _transform;
+        private readonly UnityEngine.Transform _weaponTransform;
         private readonly Factories.IProjectileFactory _factory;
         private readonly UnityEngine.Transform _projectileContainer;
         private readonly Configs.WeaponInfo[] _weaponInfos;
 
         private readonly IPlayerWeaponStorage _weaponStorage;
+        private readonly Animators.IPlayerShootingAnimator _animator;
+        private readonly UnityEngine.Animator _animatorView;
         private readonly Core.IObjectPool<Projectiles.IProjectile> _pool;
         private readonly System.Collections.Generic.List<Projectiles.IProjectile> _projectiles = new(64);
 
@@ -25,18 +29,20 @@
         {
             _playerInput = args.PlayerInput;
             _transform = args.Transform;
+            _weaponTransform = args.WeaponTransform;
             _factory = args.ProjectileFactory;
             _projectileContainer = args.ProjectileContainer;
             _weaponInfos = args.PlayerConfig.WeaponConfig.WeaponInfos;
+            _animatorView = args.AnimatorView;
 
             _weaponStorage = new PlayerWeaponStorage(in _weaponInfos);
+            _animator = new Animators.PlayerShootingAnimator(_animatorView);
 
             _pool = new Core.ObjectPool<Projectiles.IProjectile>(CreateProjectile);
 
             Subscribe();
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Tick(float deltaTime)
         {
             CheckInput();
@@ -44,23 +50,33 @@
             _weaponStorage.Tick(deltaTime);
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void FixedTick(float deltaTime)
         {
             if (_isShooting == false)
                 return;
 
             if (_weaponStorage.CurrentAmmo == 0)
+            {
                 AmmoOut?.Invoke();
-            else if (_weaponStorage.TryShoot(_playerInput.ShootingMode, out var index))
+            }
+            else if (_weaponStorage.TryShoot(_shootingMode, out var index))
+            {
                 InitProjectile(index);
 
+                StartAnimateShoot();
+            }
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public void LateTick(float deltaTime)
+        {
+            _animator.LateTick(deltaTime);
+        }
+
         public void SetPause(bool isPaused)
         {
             _weaponStorage.SetPause(isPaused);
+            _animator.SetPause(isPaused);
         }
 
         public void Restart()
@@ -80,6 +96,11 @@
 #endif
 
             _weaponStorage.AddAmmo(count);
+        }
+
+        public void StopAnimation()
+        {
+            _animator.Stop();
         }
 
         public void Destroy()
@@ -107,6 +128,7 @@
         private void CheckInput()
         {
             _isShooting = _playerInput.IsShooting;
+            _shootingMode = _playerInput.ShootingMode;
         }
 
         private void InitProjectile(int index)
@@ -116,10 +138,16 @@
             var projectileOffset = _weaponInfos[_currentIndex].ProjectileOffset;
             var projectile = _pool.Get();
             var direction = _transform.localScale.x == Constants.Left ? Constants.Left : Constants.Right;
-            var position = _transform.position + direction * projectileOffset;
+            var position = _weaponTransform.position + direction * projectileOffset;
             projectile.InitPosition(position, direction);
             projectile.Activate();
             projectile.Destroyed += OnProjectileDestroyed;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private void StartAnimateShoot()
+        {
+            _animator.Animate();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

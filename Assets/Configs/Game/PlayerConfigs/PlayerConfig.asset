@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb39e000f7cf85545903180a2014706d, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  _movementXSensitivity: 3
+  _movementXSensitivity: 8
   _hp: 1
   _weaponConfig: {fileID: 11400000, guid: 52c521a1ed6b7114a84e9ccaedca3160, type: 2}

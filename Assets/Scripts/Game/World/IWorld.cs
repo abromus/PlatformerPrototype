@@ -3,6 +3,7 @@ namespace PlatformerPrototype.Game.World
     internal interface IWorld :
         Core.Services.IUpdatable,
         Core.Services.IFixedUpdatable,
+        Core.Services.ILateUpdatable,
         Core.Services.IPausable,
         Core.IDestroyable,
         IRestartable
