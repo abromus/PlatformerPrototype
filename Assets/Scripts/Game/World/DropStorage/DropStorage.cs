@@ -4,16 +4,18 @@
     {
         private Configs.IDropConfig _currentDropConfig;
 
+        private readonly Services.IAudioService _audioService;
         private readonly Factories.IDropFactory _factory;
         private readonly UnityEngine.Transform _container;
 
         private readonly Core.IObjectPool<World.Drops.IDrop> _pool;
         private readonly System.Collections.Generic.List<World.Drops.IDrop> _drops = new(64);
 
-        internal DropStorage(Factories.IDropFactory factory, UnityEngine.Transform container)
+        internal DropStorage(in DropStorageArgs args)
         {
-            _factory = factory;
-            _container = container;
+            _audioService = args.AudioService;
+            _factory = args.Factory;
+            _container = args.Container;
 
             _pool = new Core.ObjectPool<World.Drops.IDrop>(CreateDrop);
         }
@@ -34,6 +36,7 @@
             {
                 var drop = _drops[i];
                 drop.Destroyed -= OnDropDestroyed;
+                drop.Deactivate();
                 drop.Clear();
 
                 _pool.Release(drop);
@@ -43,7 +46,14 @@
         public void Destroy()
         {
             for (int i = 0; i < _drops.Count; i++)
-                _pool.Release(_drops[i]);
+            {
+                var drop = _drops[i];
+                drop.Destroyed -= OnDropDestroyed;
+                drop.Deactivate();
+                drop.Clear();
+
+                _pool.Release(drop);
+            }
 
             _drops.Clear();
             _pool.Destroy();
@@ -51,7 +61,7 @@
 
         private World.Drops.IDrop CreateDrop()
         {
-            var drop = _factory.Create(_currentDropConfig, _container);
+            var drop = _factory.Create(_audioService, _currentDropConfig, _container);
 
             _drops.Add(drop);
 
@@ -61,6 +71,8 @@
         private void OnDropDestroyed(World.Drops.IDrop drop)
         {
             drop.Destroyed -= OnDropDestroyed;
+            drop.Deactivate();
+            drop.Destroy();
             drop.Clear();
 
             _pool.Release(drop);

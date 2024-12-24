@@ -8,7 +8,7 @@
 
         public event System.Action<IDrop> Destroyed;
 
-        public void Init(Configs.DropType dropType, int minCount, int maxCount);
+        public void Init(Services.IAudioService audioService, Configs.IDropConfig config);
 
         public void InitPosition(UnityEngine.Vector3 position);
 

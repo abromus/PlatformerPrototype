@@ -82,7 +82,13 @@
         public void Restart()
         {
             for (int i = 0; i < _projectiles.Count; i++)
-                _pool.Release(_projectiles[i]);
+            {
+                var projectile = _projectiles[i];
+                projectile.Deactivate();
+                projectile.Clear();
+
+                _pool.Release(projectile);
+            }
 
             _projectiles.Clear();
 
@@ -108,7 +114,13 @@
             Unsubscribe();
 
             for (int i = 0; i < _projectiles.Count; i++)
-                _pool.Release(_projectiles[i]);
+            {
+                var projectile = _projectiles[i];
+                projectile.Deactivate();
+                projectile.Clear();
+
+                _pool.Release(projectile);
+            }
 
             _projectiles.Clear();
             _pool.Destroy();
@@ -171,6 +183,7 @@
         private void OnProjectileDestroyed(Projectiles.IProjectile projectile)
         {
             projectile.Destroyed -= OnProjectileDestroyed;
+            projectile.Deactivate();
             projectile.Clear();
 
             _projectiles.Remove(projectile);

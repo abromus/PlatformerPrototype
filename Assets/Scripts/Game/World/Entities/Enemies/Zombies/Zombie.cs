@@ -12,10 +12,12 @@
         private float _damage;
         private bool _isDead;
         private Configs.IDropConfig _dropConfig;
+        private DeathReason _deathReason;
 
         private IZombieMovement _movement;
         private IZombieHealth _health;
         private IZombieAnimator _animator;
+        private IEnemyAudio _audio;
 
         public override int Index => _index;
 
@@ -27,14 +29,19 @@
 
         public override Configs.IDropConfig DropConfig => _dropConfig;
 
-        public override event System.Action<IEnemy> Dead;
+        public override DeathReason DeathReason => _deathReason;
+
+        public override event System.Action<IEnemy> Died;
 
         public override void Init(in EnemyArgs args)
         {
-            _damage = args.Damage;
-            _dropConfig = args.DropConfig;
+            var info = args.Info;
 
-            InitModules(in args);
+            _index = info.Index;
+            _damage = info.Damage;
+            _dropConfig = info.DropConfig;
+
+            InitModules(args.AudioService, args.Player, in info);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -52,8 +59,10 @@
         public override void Activate()
         {
             _isDead = false;
+            _deathReason = DeathReason.None;
             _rigidbody.simulated = true;
             _health.SetActive(true);
+            _audio.PlayRunningClip();
 
             gameObject.SetActive(true);
 
@@ -65,6 +74,7 @@
             _isDead = true;
             _rigidbody.simulated = false;
             _health.SetActive(false);
+            _audio.StopLoopClips();
 
             gameObject.SetActive(false);
 
@@ -93,14 +103,6 @@
         public override void Clear()
         {
             Deactivate();
-
-            //отключить звук
-        }
-
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public override void SetIndex(int index)
-        {
-            _index = index;
         }
 
         public override void Destroy()
@@ -117,7 +119,7 @@
             if (collision.TryGetComponent<Projectiles.IProjectile>(out var damagable))
                 _health.Change(-damagable.Damage);
             else if (collision.TryGetComponent<IPlayer>(out _))
-                OnDead();
+                Die(DeathReason.Player);
         }
 
         private void OnDestroy()
@@ -125,37 +127,48 @@
             Destroy();
         }
 
-        private void InitModules(in EnemyArgs args)
+        private void InitModules(Services.IAudioService audioService, UnityEngine.Transform player, in Configs.EnemyInfo info)
         {
-            var movementArgs = new ZombieMovementArgs(args.Player, transform, args.Speed);
+            var movementArgs = new ZombieMovementArgs(player, transform, info.Speed);
             _movement = new ZombieMovement(in movementArgs);
 
-            var healthArgs = new ZombieHealthArgs(_healthView, args.Hp);
+            var healthArgs = new ZombieHealthArgs(_healthView, info.Hp);
             _health = new ZombieHealth(in healthArgs);
 
             var animatorArgs = new ZombieAnimatorArgs(_view, _movement, _animatorView);
             _animator = new ZombieAnimator(in animatorArgs);
+
+            var audioArgs = new ZombieAudioArgs(audioService, info.RunningClip, info.DeathClip);
+            _audio = new ZombieAudio(in audioArgs);
         }
 
-        private void Subscribe()
-        {
-            _health.Dead += OnDead;
-        }
-
-        private void Unsubscribe()
-        {
-            _health.Dead -= OnDead;
-        }
-
-        private void OnDead()
+        private void Die(DeathReason deathReason)
         {
             if (_isDead)
                 return;
 
             _isDead = true;
+            _deathReason = deathReason;
             _rigidbody.simulated = false;
 
-            Dead?.Invoke(this);
+            _audio.PlayDeathClip();
+
+            Died?.Invoke(this);
+        }
+
+        private void Subscribe()
+        {
+            _health.Died += OnHealthEnded;
+        }
+
+        private void Unsubscribe()
+        {
+            _health.Died -= OnHealthEnded;
+        }
+
+        private void OnHealthEnded()
+        {
+            Die(DeathReason.HealthEnded);
         }
     }
 }

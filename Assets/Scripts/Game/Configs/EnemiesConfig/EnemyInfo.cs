@@ -10,6 +10,9 @@
         [UnityEngine.SerializeField] private float _damage;
         [UnityEngine.SerializeField] private World.Entities.BaseEnemy _baseZombiePrefab;
         [UnityEngine.SerializeField] private DropConfig _dropConfig;
+        [UnityEngine.Space]
+        [UnityEngine.SerializeField] private UnityEngine.AudioClip _runningClip;
+        [UnityEngine.SerializeField] private UnityEngine.AudioClip _deathClip;
 
         internal readonly int Index => _index;
 
@@ -22,5 +25,9 @@
         internal readonly World.Entities.BaseEnemy BaseEnemyPrefab => _baseZombiePrefab;
 
         internal readonly IDropConfig DropConfig => _dropConfig;
+
+        internal readonly UnityEngine.AudioClip RunningClip => _runningClip;
+
+        internal readonly UnityEngine.AudioClip DeathClip => _deathClip;
     }
 }

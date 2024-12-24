@@ -4,22 +4,20 @@
     {
         [UnityEngine.SerializeField] private TMPro.TMP_Text _countView;
 
-        private Configs.DropType _dropType;
-        private int _minCount;
-        private int _maxCount;
+        private Services.IAudioService _audioService;
+        private Configs.IDropConfig _config;
         private int _count;
 
-        public override Configs.DropType DropType => _dropType;
+        public override Configs.DropType DropType => _config.DropType;
 
         public override int Count => _count;
 
         public override event System.Action<IDrop> Destroyed;
 
-        public override void Init(Configs.DropType dropType, int minCount, int maxCount)
+        public override void Init(Services.IAudioService audioService, Configs.IDropConfig config)
         {
-            _dropType = dropType;
-            _minCount = minCount;
-            _maxCount = maxCount;
+            _audioService = audioService;
+            _config = config;
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -30,10 +28,12 @@
 
         public override void Activate()
         {
-            _count = UnityEngine.Random.Range(_minCount, _maxCount);
+            _count = UnityEngine.Random.Range(_config.MinCount, _config.MaxCount);
             _countView.text = $"{_count}";
 
             gameObject.SetActive(true);
+
+            _audioService.PlayOneShotSound(_config.DropClip);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -45,6 +45,8 @@
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Apply()
         {
+            _audioService.PlayOneShotSound(_config.ReceivedClip);
+
             Destroyed?.Invoke(this);
         }
 

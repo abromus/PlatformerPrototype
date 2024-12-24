@@ -487,6 +487,7 @@ MonoBehaviour:
   _canvasGroup: {fileID: 8861510101137371344}
   _ammoView: {fileID: 1401502487514228566}
   _buttonSettings: {fileID: 5531510062834098206}
+  _backgroundMusic: {fileID: 8300000, guid: f8ace5b912e44fa4aa2a992b0f3d9970, type: 3}
 --- !u!1 &7693273204981142283
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: UiServiceConfig
   m_EditorClassIdentifier: 
   _uiServices:
+  - {fileID: 4957279149243596342, guid: 12c784b7014e9414ab0bbf28dc61ae20, type: 3}
   - {fileID: -6195950601840003463, guid: 77a11a22c2efdc3429ff08279ba1e25a, type: 3}
   - {fileID: 1041484108772273814, guid: 01c2d860dce88074c834196b996884a7, type: 3}

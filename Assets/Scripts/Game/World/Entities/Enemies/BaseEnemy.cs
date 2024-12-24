@@ -12,7 +12,9 @@
 
         public abstract Configs.IDropConfig DropConfig { get; }
 
-        public abstract event System.Action<IEnemy> Dead;
+        public abstract DeathReason DeathReason { get; }
+
+        public abstract event System.Action<IEnemy> Died;
 
         public abstract void Init(in EnemyArgs args);
 
@@ -31,8 +33,6 @@
         public abstract void SetPause(bool isPaused);
 
         public abstract void Clear();
-
-        public abstract void SetIndex(int index);
 
         public abstract void Destroy();
 

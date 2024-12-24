@@ -31,22 +31,24 @@
             _gameData = gameData;
             _stateMachine = stateMachine;
 
-            var serviceStorage = _gameData.CoreData.ServiceStorage;
-            _cameraService = serviceStorage.GetService<Core.Services.ICameraService>();
-            _updaterService = serviceStorage.GetService<Core.Services.IUpdaterService>();
-            _screenSystemService = _gameData.ServiceStorage.GetService<Services.IScreenSystemService>();
+            var coreServiceStorage = _gameData.CoreData.ServiceStorage;
+            var serviceStorage = _gameData.ServiceStorage;
+            _cameraService = coreServiceStorage.GetService<Core.Services.ICameraService>();
+            _updaterService = coreServiceStorage.GetService<Core.Services.IUpdaterService>();
+            _screenSystemService = serviceStorage.GetService<Services.IScreenSystemService>();
 
+            var audioService = serviceStorage.GetService<Services.IAudioService>();
             var factoryStorage = _gameData.FactoryStorage;
 
             CreatePlayer(factoryStorage);
             InitBackground();
             InitEnvironmentStorage(factoryStorage);
-            InitEnemiesSpawner(factoryStorage);
-            InitDropStorage(factoryStorage);
+            InitEnemiesSpawner(audioService, factoryStorage);
+            InitDropStorage(audioService, factoryStorage);
 
             _cameraService.AttachTo(_player.Transform);
 
-            _mainScreenArgs = new Services.MainScreenArgs(_player);
+            _mainScreenArgs = new Services.MainScreenArgs(audioService, _player);
 
             Subscribe();
         }
@@ -129,20 +131,26 @@
             _environmentStorage = new EnvironmentStorage(in args);
         }
 
-        private void InitEnemiesSpawner(Core.Factories.IFactoryStorage factoryStorage)
+        private void InitEnemiesSpawner(Services.IAudioService audioService, Core.Factories.IFactoryStorage factoryStorage)
         {
             var factory = factoryStorage.GetFactory<Factories.IEnemyFactory>();
             var config = _gameData.ConfigStorage.GetConfig<Configs.IEnemiesConfig>();
-            var args = new Entities.EnemiesSpawnerArgs(_cameraService, factory, config, _player.Transform, _enemyContainer);
+            var args = new Entities.EnemiesSpawnerArgs(
+                _cameraService,
+                audioService,
+                factory,
+                config,
+                _player.Transform,
+                _enemyContainer);
 
             _enemiesSpawner = new Entities.EnemiesSpawner(in args);
         }
 
-        private void InitDropStorage(Core.Factories.IFactoryStorage factoryStorage)
+        private void InitDropStorage(Services.IAudioService audioService, Core.Factories.IFactoryStorage factoryStorage)
         {
             var factory = factoryStorage.GetFactory<Factories.IDropFactory>();
-
-            _dropStorage = new DropStorages.DropStorage(factory, _dropContainer);
+            var args = new DropStorages.DropStorageArgs(audioService, factory, _dropContainer);
+            _dropStorage = new DropStorages.DropStorage(in args);
         }
 
         private void GameOver()

@@ -7,6 +7,7 @@
         private float _spawnDelay;
         private float _maxSpawnDelay;
 
+        private readonly Services.IAudioService _audioService;
         private readonly Factories.IEnemyFactory _factory;
         private readonly Configs.IEnemiesConfig _config;
         private readonly UnityEngine.Transform _player;
@@ -20,6 +21,7 @@
 
         internal EnemiesSpawner(in EnemiesSpawnerArgs args)
         {
+            _audioService = args.AudioService;
             _factory = args.EnemyFactory;
             _config = args.EnemyConfig;
             _player = args.Player;
@@ -81,8 +83,14 @@
             var enemies = _enemies.Values;
 
             foreach (var currentEnemies in enemies)
+            {
                 for (int i = 0; i < currentEnemies.Count; i++)
-                    currentEnemies[i].Clear();
+                {
+                    var currentEnemy = currentEnemies[i];
+                    currentEnemy.Deactivate();
+                    currentEnemy.Clear();
+                }
+            }
         }
 
         public void Stop()
@@ -99,7 +107,7 @@
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     var enemy = enemies[i];
-                    enemy.Dead -= OnEnemyDead;
+                    enemy.Died -= OnEnemyDied;
                     enemy.Deactivate();
                     enemies.Remove(enemy);
                     pool.Release(enemy);
@@ -119,7 +127,8 @@
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     var enemy = enemies[i];
-                    enemy.Dead -= OnEnemyDead;
+                    enemy.Died -= OnEnemyDied;
+                    enemy.Deactivate();
                     enemy.Clear();
                     pool.Release(enemies[i]);
                     --i;
@@ -134,11 +143,9 @@
 
         private IEnemy CreateEnemy(in Configs.EnemyInfo info, UnityEngine.Transform enemyContainer)
         {
-            var args = new EnemyArgs(info.Hp, info.Speed, info.Damage, info.DropConfig, _player);
-            var enemyIndex = info.Index;
+            var args = new EnemyArgs(_audioService, _player, info);
             var enemy = _factory.Create(info.BaseEnemyPrefab, enemyContainer);
             enemy.Init(in args);
-            enemy.SetIndex(enemyIndex);
 
             return enemy;
         }
@@ -184,7 +191,7 @@
             enemy.InitPosition(position);
             enemy.InitHp();
             enemy.Activate();
-            enemy.Dead += OnEnemyDead;
+            enemy.Died += OnEnemyDied;
 
             if (_enemies.ContainsKey(enemyIndex))
                 _enemies[enemyIndex].Add(enemy);
@@ -221,9 +228,10 @@
                     currentEnemies[i].LateTick(deltaTime);
         }
 
-        private void OnEnemyDead(IEnemy enemy)
+        private void OnEnemyDied(IEnemy enemy)
         {
-            enemy.Dead -= OnEnemyDead;
+            enemy.Died -= OnEnemyDied;
+            enemy.Deactivate();
             enemy.Clear();
 
             var index = enemy.Index;
@@ -231,7 +239,8 @@
             _enemies[index].Remove(enemy);
             _pools[index].Release(enemy);
 
-            Dropped?.Invoke(enemy.DropConfig, enemy.Position);
+            if (enemy.DeathReason == DeathReason.HealthEnded)
+                Dropped?.Invoke(enemy.DropConfig, enemy.Position);
         }
     }
 }

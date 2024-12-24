@@ -7,5 +7,7 @@
         public float Hp { get; }
 
         public IPlayerWeaponConfig WeaponConfig { get; }
+
+        public UnityEngine.AudioClip DeathClip { get; }
     }
 }

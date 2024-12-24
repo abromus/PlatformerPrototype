@@ -760,3 +760,4 @@ MonoBehaviour:
   _canvasGroup: {fileID: 8861510101137371344}
   _buttonRestart: {fileID: 1476324057676296256}
   _buttonExit: {fileID: 1080278992119532226}
+  _backgroundMusic: {fileID: 8300000, guid: 0773b2e4a50ba2143a762c82a09f834d, type: 3}

@@ -142,6 +142,7 @@
                 for (int i = 0; i < buildings.Count; i++)
                 {
                     var building = buildings[i];
+                    building.Deactivate();
                     building.Clear();
                     pool.Release(building);
                 }
@@ -162,6 +163,7 @@
                 for (int i = 0; i < foregrounds.Count; i++)
                 {
                     var foreground = foregrounds[i];
+                    foreground.Deactivate();
                     foreground.Clear();
                     pool.Release(foreground);
                 }

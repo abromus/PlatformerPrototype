@@ -61,11 +61,10 @@
             _isPaused = isPaused;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Clear()
         {
-            Destroy();
-
-            //отключить звук
+            Deactivate();
         }
 
         public override void Destroy()

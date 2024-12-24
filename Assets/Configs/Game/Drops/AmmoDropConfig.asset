@@ -16,3 +16,5 @@ MonoBehaviour:
   _baseDropPrefab: {fileID: 6935419964485081584, guid: eede545d49c13de4793f8bf28850ec31, type: 3}
   _minCount: 1
   _maxCount: 5
+  _dropClip: {fileID: 8300000, guid: 19439dfc76d93ff4c85e9d51a1fdc524, type: 3}
+  _receivedClip: {fileID: 8300000, guid: af7d06449ddbca4419a39c9dc7eb5c04, type: 3}

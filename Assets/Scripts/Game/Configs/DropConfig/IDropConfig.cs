@@ -9,5 +9,9 @@
         public int MinCount { get; }
 
         public int MaxCount { get; }
+
+        public UnityEngine.AudioClip DropClip { get; }
+
+        public UnityEngine.AudioClip ReceivedClip { get; }
     }
 }

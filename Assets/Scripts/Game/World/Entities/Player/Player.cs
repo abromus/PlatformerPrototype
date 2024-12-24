@@ -15,6 +15,7 @@ namespace PlatformerPrototype.Game.World.Entities
         private IPlayerHealth _health;
         private IPlayerDropConsumer _dropConsumer;
         private IPlayerAnimator _animator;
+        private IPlayerAudio _audio;
 
         public UnityEngine.Transform Transform => transform;
 
@@ -101,6 +102,8 @@ namespace PlatformerPrototype.Game.World.Entities
             else if (collision.TryGetComponent<IEnemy>(out var damagable))
             {
                 _health.Change(-damagable.Damage);
+
+                _audio.PlayDeathClip();
             }
         }
 
@@ -111,7 +114,9 @@ namespace PlatformerPrototype.Game.World.Entities
 
         private void InitModules()
         {
-            var eventSystemService = _gameData.ServiceStorage.GetService<Services.IEventSystemService>();
+            var serviceStorage = _gameData.ServiceStorage;
+            var audioService = serviceStorage.GetService<Services.IAudioService>();
+            var eventSystemService = serviceStorage.GetService<Services.IEventSystemService>();
             var inputService = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IInputService>();
             var playerConfig = _gameData.ConfigStorage.GetConfig<Configs.IPlayerConfig>();
 
@@ -136,6 +141,8 @@ namespace PlatformerPrototype.Game.World.Entities
             _dropConsumer = new PlayerDropConsumer(_shooting);
 
             _animator = new Animators.PlayerAnimator(transform, _movement, _animatorView);
+
+            _audio = new PlayerAudio(audioService, playerConfig.DeathClip);
         }
 
         private void Subscribe()

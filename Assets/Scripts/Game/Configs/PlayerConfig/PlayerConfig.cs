@@ -8,11 +8,15 @@
         [UnityEngine.SerializeField] private float _hp;
         [UnityEngine.Space]
         [UnityEngine.SerializeField] private PlayerWeaponConfig _weaponConfig;
+        [UnityEngine.Space]
+        [UnityEngine.SerializeField] private UnityEngine.AudioClip _deathClip;
 
         public float MovementXSensitivity => _movementXSensitivity;
 
         public float Hp => _hp;
 
         public IPlayerWeaponConfig WeaponConfig => _weaponConfig;
+
+        public UnityEngine.AudioClip DeathClip => _deathClip;
     }
 }

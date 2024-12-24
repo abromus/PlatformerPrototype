@@ -3,10 +3,12 @@
     internal sealed class GameOverState : Core.Services.IEnterState<GameStateArgs>
     {
         private readonly IScreenSystemService _screenSystemService;
+        private readonly IScreenArgs _gameOverScreenArgs;
 
-        internal GameOverState(IScreenSystemService screenSystemService)
+        internal GameOverState(IAudioService audioService, IScreenSystemService screenSystemService)
         {
             _screenSystemService = screenSystemService;
+            _gameOverScreenArgs = new GameOverScreenArgs(audioService);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -14,7 +16,7 @@
         {
             _screenSystemService.HideScreens();
 
-            _screenSystemService.Show(Configs.ScreenType.GameOver);
+            _screenSystemService.Show(Configs.ScreenType.GameOver, in _gameOverScreenArgs);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

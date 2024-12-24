@@ -2,7 +2,7 @@
 {
     internal interface IZombieHealth
     {
-        public event System.Action Dead;
+        public event System.Action Died;
 
         public void InitHp();
 

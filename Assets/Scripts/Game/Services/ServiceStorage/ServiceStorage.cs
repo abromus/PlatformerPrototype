@@ -13,13 +13,17 @@ namespace PlatformerPrototype.Game.Services
 
             uiServiceContainer.SetParent(null);
 
+            var audioSourceFactory = _gameData.FactoryStorage.GetFactory<Factories.IAudioSourceFactory>();
+            var updaterService = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IUpdaterService>();
             var uiServices = _gameData.ConfigStorage.GetConfig<Configs.IUiServiceConfig>().UiServices;
+            var audioService = InitAudioService(updaterService, uiServices, audioSourceFactory, uiServiceContainer);
             var eventSystemService = InitEventSystemService(uiServices, uiServiceContainer);
             var screenSystemService = InitScreenSystemService(uiServices, uiServiceContainer);
-            var stateMachine = InitStateMachine(screenSystemService);
+            var stateMachine = InitStateMachine(audioService, screenSystemService);
 
             _services = new(8)
             {
+                [typeof(IAudioService)] = audioService,
                 [typeof(IEventSystemService)] = eventSystemService,
                 [typeof(IScreenSystemService)] = screenSystemService,
                 [typeof(Core.Services.IStateMachine)] = stateMachine,
@@ -42,6 +46,15 @@ namespace PlatformerPrototype.Game.Services
             _services.Clear();
         }
 
+        private IAudioService InitAudioService(Core.Services.IUpdaterService updaterService, Core.Services.IUiService[] uiServices, Factories.IAudioSourceFactory audioSourceFactory, UnityEngine.Transform uiServiceContainer)
+        {
+            var audioServicePrefab = GetService<IAudioService>(uiServices);
+            var audioService = InstantiateUiService(audioServicePrefab as Core.Services.BaseUiService, uiServiceContainer) as IAudioService;
+            audioService.Init(updaterService, audioSourceFactory);
+
+            return audioService;
+        }
+
         private IEventSystemService InitEventSystemService(Core.Services.IUiService[] uiServices, UnityEngine.Transform uiServiceContainer)
         {
             var eventSystemServicePrefab = GetService<IEventSystemService>(uiServices);
@@ -60,7 +73,7 @@ namespace PlatformerPrototype.Game.Services
             return screenSystemService;
         }
 
-        private Core.Services.IStateMachine InitStateMachine(IScreenSystemService screenSystemService)
+        private Core.Services.IStateMachine InitStateMachine(IAudioService audioService, IScreenSystemService screenSystemService)
         {
             var stateMachine = new Core.Services.StateMachine();
 
@@ -68,7 +81,7 @@ namespace PlatformerPrototype.Game.Services
             stateMachine.Add(new GameStartState(stateMachine));
             stateMachine.Add(new GameRestartState(stateMachine));
             stateMachine.Add(new GameLoopState());
-            stateMachine.Add(new GameOverState(screenSystemService));
+            stateMachine.Add(new GameOverState(audioService, screenSystemService));
 
             return stateMachine;
         }

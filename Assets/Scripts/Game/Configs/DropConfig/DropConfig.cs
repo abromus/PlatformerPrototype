@@ -7,6 +7,9 @@
         [UnityEngine.SerializeField] private World.Drops.BaseDrop _baseDropPrefab;
         [UnityEngine.SerializeField] private int _minCount;
         [UnityEngine.SerializeField] private int _maxCount;
+        [UnityEngine.Space]
+        [UnityEngine.SerializeField] private UnityEngine.AudioClip _dropClip;
+        [UnityEngine.SerializeField] private UnityEngine.AudioClip _receivedClip;
 
         public DropType DropType => _dropType;
 
@@ -15,5 +18,9 @@
         public int MinCount => _minCount;
 
         public int MaxCount => _maxCount;
+
+        public UnityEngine.AudioClip DropClip => _dropClip;
+
+        public UnityEngine.AudioClip ReceivedClip => _receivedClip;
     }
 }

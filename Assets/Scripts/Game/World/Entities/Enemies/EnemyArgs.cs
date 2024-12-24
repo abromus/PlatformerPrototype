@@ -3,34 +3,24 @@
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 8)]
     internal readonly struct EnemyArgs
     {
-        private readonly float _hp;
-        private readonly float _speed;
-        private readonly float _damage;
-        private readonly Configs.IDropConfig _dropConfig;
+        private readonly Services.IAudioService _audioService;
         private readonly UnityEngine.Transform _player;
+        private readonly Configs.EnemyInfo _info;
 
-        internal readonly float Hp => _hp;
-
-        internal readonly float Speed => _speed;
-
-        internal readonly float Damage => _damage;
-
-        internal readonly Configs.IDropConfig DropConfig => _dropConfig;
+        internal readonly Services.IAudioService AudioService => _audioService;
 
         internal readonly UnityEngine.Transform Player => _player;
 
+        internal readonly Configs.EnemyInfo Info => _info;
+
         internal EnemyArgs(
-            float hp,
-            float speed,
-            float damage,
-            Configs.IDropConfig dropConfig,
-            UnityEngine.Transform player)
+            Services.IAudioService audioService,
+            UnityEngine.Transform player,
+            Configs.EnemyInfo info)
         {
-            _hp = hp;
-            _speed = speed;
-            _damage = damage;
-            _dropConfig = dropConfig;
+            _audioService = audioService;
             _player = player;
+            _info = info;
         }
     }
 }

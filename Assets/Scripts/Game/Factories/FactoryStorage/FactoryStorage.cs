@@ -11,17 +11,19 @@
             _gameData = gameData;
             _configStorage = configStorage;
 
-            var updater = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IUpdaterService>();
+            var updaterService = _gameData.CoreData.ServiceStorage.GetService<Core.Services.IUpdaterService>();
             var uiFactories = _configStorage.GetConfig<Core.Configs.IUiFactoryConfig>().UiFactories;
+            var audioSourceFactory = InitAudioSourceFactory(uiFactories);
             var dropFactory = InitDropFactory(uiFactories);
             var enemyFactory = InitEnemyFactory(uiFactories);
             var environmentFactory = InitEnvironmentFactory(uiFactories);
             var playerFactory = InitPlayerFactory(uiFactories);
-            var projectileFactory = InitProjectileFactory(uiFactories, updater);
+            var projectileFactory = InitProjectileFactory(uiFactories, updaterService);
             var worldFactory = InitWorldFactory(uiFactories);
 
             _factories = new(8)
             {
+                [typeof(IAudioSourceFactory)] = audioSourceFactory,
                 [typeof(IDropFactory)] = dropFactory,
                 [typeof(IEnemyFactory)] = enemyFactory,
                 [typeof(IEnvironmentFactory)] = environmentFactory,
@@ -35,6 +37,13 @@
         public TFactory GetFactory<TFactory>() where TFactory : class, Core.Factories.IFactory
         {
             return _factories[typeof(TFactory)] as TFactory;
+        }
+
+        private IAudioSourceFactory InitAudioSourceFactory(Core.Factories.IUiFactory[] uiFactories)
+        {
+            var audioSourceFactory = GetFactory<IAudioSourceFactory>(uiFactories);
+
+            return audioSourceFactory;
         }
 
         private IDropFactory InitDropFactory(Core.Factories.IUiFactory[] uiFactories)

@@ -10,14 +10,14 @@
 
         public Configs.IDropConfig DropConfig { get; }
 
-        public event System.Action<IEnemy> Dead;
+        public DeathReason DeathReason { get; }
+
+        public event System.Action<IEnemy> Died;
 
         public void Init(in EnemyArgs args);
 
         public void InitHp();
 
         public void InitPosition(UnityEngine.Vector3 position);
-
-        public void SetIndex(int index);
     }
 }

@@ -15,3 +15,4 @@ MonoBehaviour:
   _movementXSensitivity: 8
   _hp: 1
   _weaponConfig: {fileID: 11400000, guid: 52c521a1ed6b7114a84e9ccaedca3160, type: 2}
+  _deathClip: {fileID: 8300000, guid: 13d428c6028db0d4aafeb68697ae9512, type: 3}

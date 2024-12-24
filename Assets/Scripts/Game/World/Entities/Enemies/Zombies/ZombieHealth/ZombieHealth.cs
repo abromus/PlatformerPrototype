@@ -5,7 +5,7 @@
         private readonly Health.HealthView _healthView;
         private readonly Health.IHealth _health = new Health.Health();
 
-        public event System.Action Dead;
+        public event System.Action Died;
 
         internal ZombieHealth(in ZombieHealthArgs args)
         {
@@ -42,7 +42,7 @@
             if (0f < _health.CurrentHp)
                 return;
 
-            Dead?.Invoke();
+            Died?.Invoke();
         }
     }
 }
