@@ -1,22 +1,21 @@
 ﻿namespace PlatformerPrototype.Game.Services
 {
-    internal sealed class MainScreen : BaseScreen
+    internal sealed class GameOverScreen : BaseScreen
     {
-        [UnityEngine.SerializeField] private TMPro.TMP_Text _ammoView;
-        [UnityEngine.SerializeField] private UnityEngine.UI.Button _buttonSettings;
+        [UnityEngine.SerializeField] private UnityEngine.UI.Button _buttonRestart;
+        [UnityEngine.SerializeField] private UnityEngine.UI.Button _buttonExit;
         [UnityEngine.Space]
         [UnityEngine.SerializeField] private UnityEngine.AudioClip _backgroundMusic;
 
         private Data.IGameData _gameData;
         private IAudioService _audioService;
-        private World.Entities.IPlayer _player;
-        private IScreenSystemService _screenSystemService;
         private bool _isShown;
 
-        public override Configs.ScreenType ScreenType => Configs.ScreenType.Main;
+        public override Configs.ScreenType ScreenType => Configs.ScreenType.GameOver;
 
         public override bool IsShown => _isShown;
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void Init(Data.IGameData gameData, in IScreenArgs args = null)
         {
             _gameData = gameData;
@@ -24,17 +23,16 @@
             if (args == null)
                 UnityEngine.Debug.LogError($"args is null!");
 
-            var mainScreenArgs = (MainScreenArgs)args;
-            _audioService = mainScreenArgs.AudioService;
-            _player = mainScreenArgs.Player;
-            _screenSystemService = _gameData.ServiceStorage.GetService<IScreenSystemService>();
+            if (args is GameOverScreenArgs gameOverScreenArgs)
+                _audioService = gameOverScreenArgs.AudioService;
+            else
+                UnityEngine.Debug.LogError($"args is not {typeof(GameOverScreenArgs)}!");
         }
 
         public override void Show()
         {
             base.Show();
 
-            UpdateView();
             PlayBackgroundMusic();
             Subscribe();
 
@@ -52,12 +50,6 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        private void UpdateView()
-        {
-            _ammoView.text = $"{_player.CurrentAmmo}";
-        }
-
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void PlayBackgroundMusic()
         {
             _audioService.PlayBackgroundMusic(_backgroundMusic);
@@ -71,27 +63,26 @@
 
         private void Subscribe()
         {
-            _buttonSettings.onClick.AddListener(OnButtonSettingsClicked);
-
-            _player.AmmoChanged += OnAmmoChanged;
+            _buttonRestart.onClick.AddListener(OnButtonRestartClicked);
+            _buttonExit.onClick.AddListener(OnButtonExitClicked);
         }
 
         private void Unsubscribe()
         {
-            _buttonSettings.onClick.RemoveListener(OnButtonSettingsClicked);
-
-            if (_player != null)
-                _player.AmmoChanged += OnAmmoChanged;
+            _buttonRestart.onClick.RemoveListener(OnButtonRestartClicked);
+            _buttonExit.onClick.RemoveListener(OnButtonExitClicked);
         }
 
-        private void OnButtonSettingsClicked()
+        private void OnButtonRestartClicked()
         {
-            _screenSystemService.Show(Configs.ScreenType.Settings);
+            Hide();
+
+            _gameData.Restart();
         }
 
-        private void OnAmmoChanged()
+        private void OnButtonExitClicked()
         {
-            UpdateView();
+            _gameData.Exit();
         }
     }
 }

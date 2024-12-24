@@ -18,7 +18,7 @@
 
         public abstract void Init(in EnemyArgs args);
 
-        public abstract void InitPosition(UnityEngine.Vector3 position);
+        public abstract void InitPosition(in UnityEngine.Vector3 position);
 
         public abstract void InitHp();
 

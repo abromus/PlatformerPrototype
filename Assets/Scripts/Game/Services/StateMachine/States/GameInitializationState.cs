@@ -16,7 +16,7 @@
             var world = CreateWorld();
             var args = new GameStateArgs(world);
 
-            _stateMachine.Enter<GameStartState, GameStateArgs>(args);
+            _stateMachine.Enter<GameRestartState, GameStateArgs>(in args);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

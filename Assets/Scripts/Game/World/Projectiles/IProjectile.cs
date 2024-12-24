@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.World.Projectiles
 {
-    internal interface IProjectile : 
+    internal interface IProjectile :
         Core.IPoolable,
         Core.Services.IUpdatable,
         Core.Services.IPausable,
@@ -11,6 +11,6 @@
 
         public void Init(Core.Services.IUpdaterService updaterSevice);
 
-        public void InitPosition(UnityEngine.Vector3 position, float direction);
+        public void InitPosition(in UnityEngine.Vector3 position, float direction);
     }
 }

@@ -78,7 +78,7 @@ namespace PlatformerPrototype.Game.World.Entities
             transform.position = UnityEngine.Vector3.zero;
 
             var localScale = transform.localScale;
-            localScale.x = 1f;
+            localScale.x = Constants.Right;
             transform.localScale = localScale;
 
             _shooting.Restart();
@@ -140,7 +140,8 @@ namespace PlatformerPrototype.Game.World.Entities
 
             _dropConsumer = new PlayerDropConsumer(_shooting);
 
-            _animator = new Animators.PlayerAnimator(transform, _movement, _animatorView);
+            var playerAnimatorArgs = new Animators.PlayerAnimatorArgs(transform, _movement, _animatorView);
+            _animator = new Animators.PlayerAnimator(in playerAnimatorArgs);
 
             _audio = new PlayerAudio(audioService, playerConfig.DeathClip);
         }

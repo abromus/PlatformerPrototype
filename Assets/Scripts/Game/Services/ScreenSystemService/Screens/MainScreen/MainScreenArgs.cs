@@ -10,7 +10,9 @@
 
         internal readonly World.Entities.IPlayer Player => _player;
 
-        internal MainScreenArgs(IAudioService audioService, World.Entities.IPlayer player)
+        internal MainScreenArgs(
+            IAudioService audioService,
+            World.Entities.IPlayer player)
         {
             _audioService = audioService;
             _player = player;

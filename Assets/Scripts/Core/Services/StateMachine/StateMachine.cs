@@ -23,11 +23,11 @@
             state.Enter();
         }
 
-        public void Enter<TState, TPayload>(TPayload payload) where TState : class, IEnterState<TPayload>
+        public void Enter<TState, TPayload>(in TPayload payload) where TState : class, IEnterState<TPayload>
         {
             var state = ChangeState<TState>();
 
-            state.Enter(payload);
+            state.Enter(in payload);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

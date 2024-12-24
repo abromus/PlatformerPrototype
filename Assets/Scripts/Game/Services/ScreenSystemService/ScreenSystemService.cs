@@ -44,7 +44,7 @@
             }
 
 #if UNITY_EDITOR
-            UnityEngine.Debug.LogError($"[ScreenSystemService] Hasn't screen with type {screenType}");
+            UnityEngine.Debug.LogError($"[ScreenSystemService]: Hasn't screen with type {screenType}");
 #endif
         }
 

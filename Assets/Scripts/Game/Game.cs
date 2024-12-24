@@ -48,6 +48,8 @@
 
         private void OnExited()
         {
+            _stateMachine.Enter<Services.GameExitState>();
+
             Exited?.Invoke();
         }
     }

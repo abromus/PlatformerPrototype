@@ -7,6 +7,6 @@
 
     public interface IEnterState<TPayload> : IExitState
     {
-        public void Enter(TPayload payload);
+        public void Enter(in TPayload payload);
     }
 }

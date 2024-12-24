@@ -1,5 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.Configs
 {
+    [System.Serializable]
     [UnityEngine.CreateAssetMenu(fileName = nameof(DropConfig), menuName = ConfigKeys.GamePathKey + nameof(DropConfig))]
     internal sealed class DropConfig : UnityEngine.ScriptableObject, IDropConfig
     {

@@ -45,7 +45,7 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public override void InitPosition(UnityEngine.Vector3 position)
+        public override void InitPosition(in UnityEngine.Vector3 position)
         {
             transform.position = position;
         }
@@ -79,7 +79,7 @@
             gameObject.SetActive(false);
 
             Unsubscribe();
-        }    
+        }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public override void FixedTick(float deltaTime)

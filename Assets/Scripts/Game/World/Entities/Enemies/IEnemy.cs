@@ -18,6 +18,6 @@
 
         public void InitHp();
 
-        public void InitPosition(UnityEngine.Vector3 position);
+        public void InitPosition(in UnityEngine.Vector3 position);
     }
 }

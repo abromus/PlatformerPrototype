@@ -9,11 +9,11 @@
         private readonly IPlayerMovement _playerMovement;
         private readonly UnityEngine.Animator _animatorView;
 
-        internal PlayerAnimator(UnityEngine.Transform player, IPlayerMovement playerMovement, UnityEngine.Animator animatorView)
+        internal PlayerAnimator(in PlayerAnimatorArgs args)
         {
-            _player = player;
-            _playerMovement = playerMovement;
-            _animatorView = animatorView;
+            _player = args.Player;
+            _playerMovement = args.PlayerMovement;
+            _animatorView = args.AnimatorView;
 
             _lastDirection = _player.localScale.x;
 
@@ -48,9 +48,9 @@
 
             var direction = _player.localScale.x;
 
-            if (_lastDirection == Constants.Left && direction == Constants.Right)
+            if (UnityEngine.Mathf.Approximately(_lastDirection, Constants.Left) && UnityEngine.Mathf.Approximately(direction, Constants.Right))
                 UpdateMoveDirection(Constants.Right);
-            else if (_lastDirection == Constants.Right && direction == Constants.Left)
+            else if (UnityEngine.Mathf.Approximately(_lastDirection, Constants.Right) && UnityEngine.Mathf.Approximately(direction, Constants.Left))
                 UpdateMoveDirection(Constants.Left);
         }
 

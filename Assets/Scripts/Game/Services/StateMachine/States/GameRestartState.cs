@@ -9,11 +9,11 @@
             _stateMachine = stateMachine;
         }
 
-        public void Enter(GameStateArgs args)
+        public void Enter(in GameStateArgs args)
         {
             args.World.Restart();
 
-            _stateMachine.Enter<GameLoopState, GameStateArgs>(args);
+            _stateMachine.Enter<GameLoopState>();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

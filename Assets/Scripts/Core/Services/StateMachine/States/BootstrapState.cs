@@ -13,7 +13,7 @@
         {
             var sceneInfo = new SceneInfo(SceneNames.Core, UnityEngine.SceneManagement.LoadSceneMode.Single, true, OnSceneLoad);
 
-            _stateMachine.Enter<SceneLoaderState, SceneInfo>(sceneInfo);
+            _stateMachine.Enter<SceneLoaderState, SceneInfo>(in sceneInfo);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

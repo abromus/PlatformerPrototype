@@ -3,15 +3,15 @@
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 8)]
     internal readonly struct ZombieHealthArgs
     {
-        private readonly Health.HealthView _healthView;
+        private readonly Health.IHealthView _healthView;
         private readonly float _hp;
 
-        internal readonly Health.HealthView HealthView => _healthView;
+        internal readonly Health.IHealthView HealthView => _healthView;
 
         internal readonly float Hp => _hp;
 
         internal ZombieHealthArgs(
-            Health.HealthView healthView,
+            Health.IHealthView healthView,
             float hp)
         {
             _healthView = healthView;

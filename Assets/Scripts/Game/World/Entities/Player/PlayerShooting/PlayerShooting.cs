@@ -35,7 +35,7 @@
             _weaponInfos = args.PlayerConfig.WeaponConfig.WeaponInfos;
             _animatorView = args.AnimatorView;
 
-            _weaponStorage = new PlayerWeaponStorage(in _weaponInfos);
+            _weaponStorage = new PlayerWeaponStorage(_weaponInfos);
             _animator = new Animators.PlayerShootingAnimator(_animatorView);
 
             _pool = new Core.ObjectPool<Projectiles.IProjectile>(CreateProjectile);
@@ -148,10 +148,10 @@
             _currentIndex = index;
 
             var projectileOffset = _weaponInfos[_currentIndex].ProjectileOffset;
-            var projectile = _pool.Get();
-            var direction = _transform.localScale.x == Constants.Left ? Constants.Left : Constants.Right;
+            var direction = UnityEngine.Mathf.Approximately(_transform.localScale.x, Constants.Left) ? Constants.Left : Constants.Right;
             var position = _weaponTransform.position + direction * projectileOffset;
-            projectile.InitPosition(position, direction);
+            var projectile = _pool.Get();
+            projectile.InitPosition(in position, direction);
             projectile.Activate();
             projectile.Destroyed += OnProjectileDestroyed;
         }

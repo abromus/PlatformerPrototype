@@ -32,10 +32,10 @@
             _isPaused = isPaused;
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void CheckDirection()
         {
-            var position = _transform.position;
-            _direction = _player.position.x < position.x ? Constants.Left : Constants.Right;
+            _direction = _player.position.x < _transform.position.x ? Constants.Left : Constants.Right;
         }
 
         private void Move(float deltaTime)

@@ -64,12 +64,12 @@
         {
             var localScale = _transform.localScale;
 
-            if (localScale.x == Constants.Left && _moveXDirection == Constants.Right)
+            if (UnityEngine.Mathf.Approximately(localScale.x, Constants.Left) && UnityEngine.Mathf.Approximately(_moveXDirection, Constants.Right))
             {
                 localScale.x = Constants.Right;
                 _transform.localScale = localScale;
             }
-            else if (localScale.x == Constants.Right && _moveXDirection == Constants.Left)
+            else if (UnityEngine.Mathf.Approximately(localScale.x, Constants.Right) && UnityEngine.Mathf.Approximately(_moveXDirection, Constants.Left))
             {
                 localScale.x = Constants.Left;
                 _transform.localScale = localScale;

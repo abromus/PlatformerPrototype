@@ -20,12 +20,12 @@
             _pool = new Core.ObjectPool<World.Drops.IDrop>(CreateDrop);
         }
 
-        public void Drop(Configs.IDropConfig dropConfig, UnityEngine.Vector3 position)
+        public void Drop(Configs.IDropConfig dropConfig, in UnityEngine.Vector3 position)
         {
             _currentDropConfig = dropConfig;
 
             var drop = _pool.Get();
-            drop.InitPosition(position);
+            drop.InitPosition(in position);
             drop.Activate();
             drop.Destroyed += OnDropDestroyed;
         }

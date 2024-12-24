@@ -44,6 +44,7 @@
             TryMoveBackgrounds(playerPosition);
         }
 
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void Restart()
         {
             for (int i = 0; i < _chunks.Count; i++)

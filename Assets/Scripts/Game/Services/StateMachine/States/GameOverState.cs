@@ -1,6 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.Services
 {
-    internal sealed class GameOverState : Core.Services.IEnterState<GameStateArgs>
+    internal sealed class GameOverState : Core.Services.IEnterState
     {
         private readonly IScreenSystemService _screenSystemService;
         private readonly IScreenArgs _gameOverScreenArgs;
@@ -12,7 +12,7 @@
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public void Enter(GameStateArgs args)
+        public void Enter()
         {
             _screenSystemService.HideScreens();
 

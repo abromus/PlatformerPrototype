@@ -17,7 +17,7 @@ namespace PlatformerPrototype.Game.World.Entities
 
         public event System.Action AmmoChanged;
 
-        internal PlayerWeaponStorage(in WeaponInfo[] weaponInfos)
+        internal PlayerWeaponStorage(WeaponInfo[] weaponInfos)
         {
             _weaponInfos = weaponInfos;
 
@@ -44,7 +44,6 @@ namespace PlatformerPrototype.Game.World.Entities
             InitRandomWeapon();
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public bool TryShoot(ShootingMode shootingMode, out int index)
         {
             index = -1;
@@ -72,7 +71,6 @@ namespace PlatformerPrototype.Game.World.Entities
             AmmoChanged?.Invoke();
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private void InitRandomWeapon()
         {
             _currentIndex = UnityEngine.Random.Range(0, _weaponInfos.Length);

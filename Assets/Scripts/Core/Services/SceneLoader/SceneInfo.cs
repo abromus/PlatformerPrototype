@@ -5,8 +5,8 @@
     {
         private readonly string _sceneName;
         private readonly UnityEngine.SceneManagement.LoadSceneMode _mode;
-        private readonly bool _isActive;
         private readonly System.Action _success;
+        private readonly bool _isActive;
 
         internal readonly string SceneName => _sceneName;
 

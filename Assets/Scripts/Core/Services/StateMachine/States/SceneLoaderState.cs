@@ -9,7 +9,7 @@
             _sceneLoader = sceneLoader;
         }
 
-        public void Enter(SceneInfo info)
+        public void Enter(in SceneInfo info)
         {
             _sceneLoader.Load(in info);
         }

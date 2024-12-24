@@ -143,7 +143,7 @@
 
         private IEnemy CreateEnemy(in Configs.EnemyInfo info, UnityEngine.Transform enemyContainer)
         {
-            var args = new EnemyArgs(_audioService, _player, info);
+            var args = new EnemyArgs(_audioService, _player, in info);
             var enemy = _factory.Create(info.BaseEnemyPrefab, enemyContainer);
             enemy.Init(in args);
 
@@ -186,7 +186,7 @@
             var halfSize = Constants.Half * enemy.Size.x;
             var spawnOffset = UnityEngine.Random.Range(_config.MinSpawnOffset, _config.MaxSpawnOffset);
             var screenOffset = _screenRect.size.x + halfSize;
-            position.x = direction == Constants.Left ? position.x - spawnOffset - screenOffset : position.x + spawnOffset + screenOffset;
+            position.x = UnityEngine.Mathf.Approximately(direction, Constants.Left) ? position.x - spawnOffset - screenOffset : position.x + spawnOffset + screenOffset;
 
             enemy.InitPosition(position);
             enemy.InitHp();

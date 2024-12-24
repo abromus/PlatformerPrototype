@@ -4,7 +4,7 @@
     internal readonly struct ZombieAudioArgs
     {
         private readonly Services.IAudioService _audioService;
-        private readonly UnityEngine.AudioClip  _runningClip;
+        private readonly UnityEngine.AudioClip _runningClip;
         private readonly UnityEngine.AudioClip _deathClip;
 
         internal readonly Services.IAudioService AudioService => _audioService;

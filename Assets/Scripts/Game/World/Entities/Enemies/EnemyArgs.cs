@@ -16,7 +16,7 @@
         internal EnemyArgs(
             Services.IAudioService audioService,
             UnityEngine.Transform player,
-            Configs.EnemyInfo info)
+            in Configs.EnemyInfo info)
         {
             _audioService = audioService;
             _player = player;

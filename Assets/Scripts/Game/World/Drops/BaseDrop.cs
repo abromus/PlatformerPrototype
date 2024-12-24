@@ -10,7 +10,7 @@
 
         public abstract void Init(Services.IAudioService audioService, Configs.IDropConfig config);
 
-        public abstract void InitPosition(UnityEngine.Vector3 position);
+        public abstract void InitPosition(in UnityEngine.Vector3 position);
 
         public abstract void Apply();
 

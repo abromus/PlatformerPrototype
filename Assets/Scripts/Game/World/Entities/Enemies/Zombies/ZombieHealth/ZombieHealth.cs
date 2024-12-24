@@ -2,7 +2,7 @@
 {
     internal sealed class ZombieHealth : IZombieHealth
     {
-        private readonly Health.HealthView _healthView;
+        private readonly Health.IHealthView _healthView;
         private readonly Health.IHealth _health = new Health.Health();
 
         public event System.Action Died;

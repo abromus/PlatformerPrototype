@@ -8,7 +8,7 @@
 
         public abstract void Init(Core.Services.IUpdaterService updaterSevice);
 
-        public abstract void InitPosition(UnityEngine.Vector3 position, float direction);
+        public abstract void InitPosition(in UnityEngine.Vector3 position, float direction);
 
         public abstract void Tick(float deltaTime);
 

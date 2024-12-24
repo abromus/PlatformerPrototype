@@ -106,9 +106,7 @@
         private void Unsubscribe()
         {
             if (_updaterService != null)
-            {
                 _updaterService.RemovePausable(this);
-            }
         }
     }
 }

@@ -46,7 +46,11 @@ namespace PlatformerPrototype.Game.Services
             _services.Clear();
         }
 
-        private IAudioService InitAudioService(Core.Services.IUpdaterService updaterService, Core.Services.IUiService[] uiServices, Factories.IAudioSourceFactory audioSourceFactory, UnityEngine.Transform uiServiceContainer)
+        private IAudioService InitAudioService(
+            Core.Services.IUpdaterService updaterService,
+            Core.Services.IUiService[] uiServices,
+            Factories.IAudioSourceFactory audioSourceFactory,
+            UnityEngine.Transform uiServiceContainer)
         {
             var audioServicePrefab = GetService<IAudioService>(uiServices);
             var audioService = InstantiateUiService(audioServicePrefab as Core.Services.BaseUiService, uiServiceContainer) as IAudioService;
@@ -78,10 +82,10 @@ namespace PlatformerPrototype.Game.Services
             var stateMachine = new Core.Services.StateMachine();
 
             stateMachine.Add(new GameInitializationState(_gameData, stateMachine));
-            stateMachine.Add(new GameStartState(stateMachine));
             stateMachine.Add(new GameRestartState(stateMachine));
             stateMachine.Add(new GameLoopState());
             stateMachine.Add(new GameOverState(audioService, screenSystemService));
+            stateMachine.Add(new GameExitState());
 
             return stateMachine;
         }

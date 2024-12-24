@@ -1,5 +1,6 @@
 ﻿namespace PlatformerPrototype.Game.World.Projectiles
 {
+    [System.Serializable]
     internal sealed class Projectile : BaseProjectile
     {
         [UnityEngine.SerializeField] private float _damage;
@@ -22,7 +23,7 @@
             _updaterService = updaterSevice;
         }
 
-        public override void InitPosition(UnityEngine.Vector3 position, float direction)
+        public override void InitPosition(in UnityEngine.Vector3 position, float direction)
         {
             transform.position = position;
 

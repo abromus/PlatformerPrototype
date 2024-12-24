@@ -158,9 +158,7 @@
             _player.Stop();
             _enemiesSpawner.Stop();
 
-            var args = new Services.GameStateArgs(this);
-
-            _stateMachine.Enter<Services.GameOverState, Services.GameStateArgs>(args);
+            _stateMachine.Enter<Services.GameOverState>();
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -212,7 +210,7 @@
         {
             var args = new Services.GameStateArgs(this);
 
-            _stateMachine.Enter<Services.GameRestartState, Services.GameStateArgs>(args);
+            _stateMachine.Enter<Services.GameRestartState, Services.GameStateArgs>(in args);
         }
 
         private void OnPlayerDead()
@@ -224,7 +222,7 @@
 
         private void OnDropped(Configs.IDropConfig dropConfig, UnityEngine.Vector3 position)
         {
-            _dropStorage.Drop(dropConfig, position);
+            _dropStorage.Drop(dropConfig, in position);
         }
     }
 }
